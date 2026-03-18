@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String   @db.Text
+  excerpt   String
+  author    String
+  category  String
+  image     String
+  createdAt DateTime @default(now())
+}
+
+model Sermon {
+  id        Int      @id @default(autoincrement())
+  title     String
+  speaker   String
+  category  String
+  date      String
+  videoUrl  String
+  thumbnail String
+}
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  time        String
+  location    String
+  image       String?
+  createdAt   DateTime @default(now())
+}
+
+model Program {
+  id          Int      @id @default(autoincrement())
+  date_program String
+  time        String
+  activity    String
+  leader      String?
+  reader      String?
+  messenger   String?
+  announcer   String?
+  prayer      String?
+}
