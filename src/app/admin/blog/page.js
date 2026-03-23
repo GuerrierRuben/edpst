@@ -60,31 +60,36 @@ export default function AdminBlog() {
     setIsModalOpen(true);
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("L'image est trop lourde (max 2Mo)");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    if (editingId) data.append("id", editingId);
-    data.append("title", formData.title);
-    data.append("excerpt", formData.excerpt);
-    data.append("content", formData.content);
-    data.append("author", formData.author);
-    data.append("category", formData.category);
-    
-    // If it's a file, append it as 'image'
-    // If it's a string (existing image), append it as 'existingImage'
-    if (formData.image instanceof File) {
-      data.append("image", formData.image);
-    } else {
-      data.append("existingImage", formData.image);
-    }
+    const bodyData = {
+      ...formData,
+      id: editingId || undefined
+    };
 
     const method = editingId ? "PUT" : "POST";
 
     try {
       const res = await fetch("/api/posts", {
         method: method,
-        body: data,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bodyData),
       });
 
       if (res.ok) {
@@ -213,10 +218,17 @@ export default function AdminBlog() {
                   type="file"
                   accept="image/*"
                   className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-amber-500 outline-none"
-                  onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
+                  onChange={handleFileUpload}
                 />
-                {editingId && typeof formData.image === 'string' && formData.image && (
-                  <p className="text-[10px] text-gray-400 mt-1 truncate">Image actuelle : {formData.image}</p>
+                {(formData.image || editingId) && (
+                   <div className="mt-3 relative">
+                     {formData.image && typeof formData.image === 'string' && (
+                       <img src={formData.image} alt="Preview" className="h-32 w-full object-cover rounded-lg border shadow-sm" />
+                     )}
+                     <p className="text-[10px] text-gray-400 mt-1 truncate">
+                       {editingId && !formData.image ? "Laissez vide pour conserver l'image actuelle" : ""}
+                     </p>
+                   </div>
                 )}
               </div>
 

@@ -14,32 +14,42 @@ export default function NewPost() {
     image: ""
   });
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("L'image est trop lourde (max 2Mo)");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const data = new FormData();
-    data.append("title", formData.title);
-    data.append("excerpt", formData.excerpt);
-    data.append("content", formData.content);
-    data.append("author", formData.author);
-    data.append("category", formData.category);
-    if (formData.image) {
-      data.append("image", formData.image);
-    }
-
     try {
       const res = await fetch("/api/posts", {
         method: "POST",
-        body: data,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (res.ok) {
         router.push("/admin/blog"); // Retour à la liste après succès
         router.refresh();
+      } else {
+        const err = await res.json();
+        alert("Erreur : " + (err.error || "Une erreur est survenue"));
       }
     } catch (error) {
       console.error("Erreur:", error);
+      alert("Erreur de connexion");
     } finally {
       setLoading(false);
     }
@@ -92,8 +102,13 @@ export default function NewPost() {
             type="file"
             accept="image/*"
             className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-            onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
+            onChange={handleFileUpload}
           />
+          {formData.image && (
+            <div className="mt-3">
+              <img src={formData.image} alt="Preview" className="h-32 w-full object-cover rounded-lg border shadow-sm" />
+            </div>
+          )}
           <p className="text-xs text-gray-400 mt-1">Choisissez une image depuis votre ordinateur.</p>
         </div>
 
