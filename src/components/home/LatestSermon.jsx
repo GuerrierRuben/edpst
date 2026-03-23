@@ -26,6 +26,12 @@ export default function LatestSermon({ sermons }) {
     });
   };
 
+  const getYouTubeId = (url) => {
+    if (!url) return null;
+    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    return match ? match[1] : null;
+  };
+
   return (
     <>
       <section className="py-24 bg-gray-50">
