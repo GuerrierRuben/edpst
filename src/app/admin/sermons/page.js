@@ -67,30 +67,36 @@ export default function AdminSermons() {
     setIsModalOpen(true);
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("L'image est trop lourde (max 2Mo)");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, thumbnail: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    data.append("title", formData.title);
-    data.append("speaker", formData.speaker);
-    data.append("category", formData.category);
-    data.append("date", formData.date);
-    data.append("videoUrl", formData.videoUrl);
-
-    if (formData.thumbnail) {
-      data.append("thumbnail", formData.thumbnail);
-    }
-
-    if (editingId) {
-      data.append("id", editingId);
-    }
+    const bodyData = {
+      ...formData,
+      id: editingId || undefined
+    };
 
     const method = editingId ? "PUT" : "POST";
 
     try {
       const res = await fetch("/api/sermons", {
         method: method,
-        body: data,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bodyData),
       });
 
       if (res.ok) {
@@ -242,11 +248,18 @@ export default function AdminSermons() {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setFormData({ ...formData, thumbnail: e.target.files[0] })}
+                  onChange={handleFileUpload}
                   className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer"
                 />
-                {editingId && !formData.thumbnail && (
-                  <p className="text-xs text-gray-500 mt-2 text-center italic">Laissez vide pour conserver l'image actuelle</p>
+                {(formData.thumbnail || editingId) && (
+                  <div className="mt-3 relative">
+                    {formData.thumbnail && typeof formData.thumbnail === 'string' && (
+                      <img src={formData.thumbnail} alt="Preview" className="h-32 w-full object-cover rounded-lg border shadow-sm" />
+                    )}
+                    <p className="text-xs text-gray-500 mt-2 text-center italic">
+                      {editingId && !formData.thumbnail ? "Laissez vide pour conserver l'image actuelle" : ""}
+                    </p>
+                  </div>
                 )}
               </div>
 
