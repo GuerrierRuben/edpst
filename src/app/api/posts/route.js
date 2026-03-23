@@ -1,5 +1,7 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
 
 // GET : Récupérer tous les articles pour l'admin
 export async function GET() {
@@ -14,14 +16,42 @@ export async function GET() {
 // POST : Créer un nouvel article
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { title, excerpt, content, author, category, image } = body;
+    const formData = await request.formData();
+    const title = formData.get('title');
+    const excerpt = formData.get('excerpt');
+    const content = formData.get('content');
+    const author = formData.get('author');
+    const category = formData.get('category');
+    const imageFile = formData.get('image');
+
+    if (!title || !author || !category) {
+      return NextResponse.json({ error: "Champs requis manquants" }, { status: 400 });
+    }
+
+    let imagePath = "";
+    if (imageFile && typeof imageFile !== 'string') {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      
+      const filename = `blog-${Date.now()}-${imageFile.name.replace(/\s+/g, '-')}`;
+      const uploadDir = join(process.cwd(), 'public', 'images', 'posts');
+      
+      await mkdir(uploadDir, { recursive: true });
+      const filepath = join(uploadDir, filename);
+      await writeFile(filepath, buffer);
+      
+      imagePath = `/images/posts/${filename}`;
+    } else if (typeof imageFile === 'string') {
+      imagePath = imageFile;
+    }
+
     const sql = `
       INSERT INTO "Post" (title, excerpt, content, author, category, image)
       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-    const result = await query(sql, [title, excerpt, content, author, category, image]);
+    const result = await query(sql, [title, excerpt, content, author, category, imagePath]);
     return NextResponse.json(result.rows[0], { status: 201 });
   } catch (err) {
+    console.error("API POST Error:", err);
     return NextResponse.json({ error: "Erreur de création" }, { status: 500 });
   }
 }
@@ -29,11 +59,35 @@ export async function POST(request) {
 // PUT : Modifier un article
 export async function PUT(request) {
   try {
-    const body = await request.json();
-    const { id, title, excerpt, content, author, category, image } = body;
+    const formData = await request.formData();
+    const id = formData.get('id');
+    const title = formData.get('title');
+    const excerpt = formData.get('excerpt');
+    const content = formData.get('content');
+    const author = formData.get('author');
+    const category = formData.get('category');
+    const imageFile = formData.get('image');
 
     if (!id) {
       return NextResponse.json({ error: "ID requis" }, { status: 400 });
+    }
+
+    let imagePath = formData.get('existingImage') || "";
+    
+    if (imageFile && typeof imageFile !== 'string') {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      
+      const filename = `blog-${Date.now()}-${imageFile.name.replace(/\s+/g, '-')}`;
+      const uploadDir = join(process.cwd(), 'public', 'images', 'posts');
+      
+      await mkdir(uploadDir, { recursive: true });
+      const filepath = join(uploadDir, filename);
+      await writeFile(filepath, buffer);
+      
+      imagePath = `/images/posts/${filename}`;
+    } else if (typeof imageFile === 'string' && imageFile !== "") {
+      imagePath = imageFile;
     }
 
     const sql = `
@@ -41,7 +95,7 @@ export async function PUT(request) {
       SET title=$1, excerpt=$2, content=$3, author=$4, category=$5, image=$6 
       WHERE id=$7 RETURNING *`;
 
-    const result = await query(sql, [title, excerpt, content, author, category, image, id]);
+    const result = await query(sql, [title, excerpt, content, author, category, imagePath, id]);
 
     if (result.rows.length === 0) {
       return NextResponse.json({ error: "Article non trouvé" }, { status: 404 });

@@ -18,11 +18,20 @@ export default function NewPost() {
     e.preventDefault();
     setLoading(true);
 
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("excerpt", formData.excerpt);
+    data.append("content", formData.content);
+    data.append("author", formData.author);
+    data.append("category", formData.category);
+    if (formData.image) {
+      data.append("image", formData.image);
+    }
+
     try {
       const res = await fetch("/api/posts", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: data,
       });
 
       if (res.ok) {
@@ -78,13 +87,14 @@ export default function NewPost() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">URL de l'image (Unsplash ou autre)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Image de couverture</label>
           <input
-            type="text"
+            type="file"
+            accept="image/*"
             className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-            placeholder="https://images.unsplash.com/..."
-            onChange={(e) => setFormData({...formData, image: e.target.value})}
+            onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
           />
+          <p className="text-xs text-gray-400 mt-1">Choisissez une image depuis votre ordinateur.</p>
         </div>
 
         <div>

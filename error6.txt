@@ -1,0 +1,57 @@
+﻿node.exe : Loaded 
+Prisma config from 
+prisma.config.ts.
+Au caractère 
+C:\Program Files\nodejs
+\npx.ps1:29 : 3
++   & $NODE_EXE 
+$NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (Loaded Prisma   
+  c...isma.config.t    
+s.:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+
+Prisma schema loaded 
+from 
+prisma\schema.prisma.
+Datasource "db": PostgreSQL database "postgres", schema "public" at "aws-1-us-east-1.pooler.supabase.com:6543"
+Error: ERROR: prepared 
+statement "s3" already 
+exists
+   0: sql_schema_connec
+tor::flavour::postgres:
+:describe_schema_with
+           with circums
+tances=BitFlags<Circums
+tances>(0b100, 
+CanPartitionTables) pre
+view_features=BitFlags<
+PreviewFeature>(0b0) na
+mespaces=Some(Namespace
+s("public", [])) 
+schema="public"
+             at schema-
+engine\connectors\sql-s
+chema-connector\src\fla
+vour\postgres.rs:628
+   1: schema_commands::
+commands::schema_push::
+Calculate from database
+             at schema-
+engine\commands\src\com
+mands\schema_push.rs:40
+   2: schema_core::stat
+e::SchemaPush
+             at schema-
+engine\core\src\state.r
+s:531
+
+

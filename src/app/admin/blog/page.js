@@ -63,14 +63,28 @@ export default function AdminBlog() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const bodyData = editingId ? { ...formData, id: editingId } : formData;
+    const data = new FormData();
+    if (editingId) data.append("id", editingId);
+    data.append("title", formData.title);
+    data.append("excerpt", formData.excerpt);
+    data.append("content", formData.content);
+    data.append("author", formData.author);
+    data.append("category", formData.category);
+    
+    // If it's a file, append it as 'image'
+    // If it's a string (existing image), append it as 'existingImage'
+    if (formData.image instanceof File) {
+      data.append("image", formData.image);
+    } else {
+      data.append("existingImage", formData.image);
+    }
+
     const method = editingId ? "PUT" : "POST";
 
     try {
       const res = await fetch("/api/posts", {
         method: method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bodyData),
+        body: data,
       });
 
       if (res.ok) {
@@ -194,14 +208,16 @@ export default function AdminBlog() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-1">URL Image</label>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Image de couverture</label>
                 <input
-                  type="text"
+                  type="file"
+                  accept="image/*"
                   className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-amber-500 outline-none"
-                  placeholder="https://..."
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
                 />
+                {editingId && typeof formData.image === 'string' && formData.image && (
+                  <p className="text-[10px] text-gray-400 mt-1 truncate">Image actuelle : {formData.image}</p>
+                )}
               </div>
 
               <div>

@@ -2,7 +2,7 @@
 import { Pool } from 'pg';
 
 const poolConfig = {
-  connectionString: "postgresql://postgres:Best_Dev_Ever_Is_Benly@localhost:5432/edpst",
+  connectionString: process.env.DATABASE_URL,
   max: 10, // Moderate connection limit for dev environment
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000, // Increased to 10s to prevent timeouts
