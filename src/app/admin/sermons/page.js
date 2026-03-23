@@ -17,6 +17,13 @@ export default function AdminSermons() {
     thumbnail: null
   });
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString; // Si c'est déjà formatté ou invalide
+    return date.toLocaleDateString('fr-FR');
+  };
+
   const fetchSermons = () => {
     fetch("/api/sermons")
       .then((res) => res.json())
@@ -132,7 +139,7 @@ export default function AdminSermons() {
             {sermons.map((sermon) => (
               <tr key={sermon.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  {sermon.date ? new Date(sermon.date).toLocaleDateString('fr-FR') : '-'}
+                  {formatDate(sermon.date)}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-slate-900">{sermon.title}</td>
                 <td className="px-6 py-4 text-sm text-gray-500">{sermon.speaker}</td>

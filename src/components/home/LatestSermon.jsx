@@ -15,9 +15,15 @@ export default function LatestSermon({ sermons }) {
     );
   }
 
-  const getYouTubeId = (url) => {
-    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-    return match ? match[1] : null;
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
   };
 
   return (
@@ -56,7 +62,7 @@ export default function LatestSermon({ sermons }) {
                   <p className="text-gray-600 text-sm mb-4">
                     Par {sermon.speaker}
                   </p>
-                  <p className="text-sm text-gray-500">{sermon.date}</p>
+                  <p className="text-sm text-gray-500">{formatDate(sermon.date)}</p>
                 </div>
               </div>
             ))}
@@ -73,7 +79,7 @@ export default function LatestSermon({ sermons }) {
                 <div>
                   <span className="text-sm font-bold text-[#d4af37] uppercase tracking-widest">{selectedSermon.category}</span>
                   <h2 className="text-2xl font-bold text-[#0f172a] mt-1">{selectedSermon.title}</h2>
-                  <p className="text-gray-600 mt-1">{selectedSermon.speaker} • {selectedSermon.date}</p>
+                  <p className="text-gray-600 mt-1">{selectedSermon.speaker} • {formatDate(selectedSermon.date)}</p>
                 </div>
                 <button
                   onClick={() => setSelectedSermon(null)}

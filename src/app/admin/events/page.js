@@ -17,6 +17,13 @@ export default function AdminEvents() {
     image: ""
   });
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString('fr-FR');
+  };
+
   const fetchEvents = () => {
     fetch("/api/events")
       .then((res) => res.json())
@@ -137,7 +144,7 @@ export default function AdminEvents() {
             {events.map((event) => (
               <tr key={event.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 text-sm font-bold text-emerald-600">
-                  {new Date(event.date).toLocaleDateString('fr-FR')}
+                  {formatDate(event.date)}
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-slate-900">
                   <div className="flex items-center gap-3">

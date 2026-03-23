@@ -21,8 +21,8 @@ export async function POST(request) {
     const { title, date, time, location, description, image } = body;
 
     console.log('🔍 Validation des champs requis...');
-    if (!title || !date || !location || !description || !image) {
-      console.log('❌ Champs manquants:', { title: !!title, date: !!date, location: !!location, description: !!description, image: !!image });
+    if (!title || !date || !time || !location || !description || !image) {
+      console.log('❌ Champs manquants:', { title: !!title, date: !!date, time: !!time, location: !!location, description: !!description, image: !!image });
       return NextResponse.json({ error: "Tous les champs sont requis" }, { status: 400 });
     }
 
@@ -45,7 +45,7 @@ export async function PUT(request) {
     const body = await request.json();
     const { id, title, date, time, location, description, image } = body;
 
-    if (!id || !title || !date || !location || !description) {
+    if (!id || !title || !date || !time || !location || !description) {
       return NextResponse.json({ error: "Champs requis manquants" }, { status: 400 });
     }
 

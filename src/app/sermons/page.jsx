@@ -28,6 +28,17 @@ export default function SermonsPage() {
     ? sermons 
     : sermons.filter(s => s.category === activeFilter);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
   const getYouTubeId = (url) => {
     const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
     return match ? match[1] : null;
@@ -80,7 +91,7 @@ export default function SermonsPage() {
               </div>
               <span className="text-[10px] font-bold text-[#d4af37] uppercase tracking-widest">{sermon.category}</span>
               <h3 className="text-xl font-bold text-[#0f172a] mt-1 group-hover:text-[#d4af37] transition-colors">{sermon.title}</h3>
-              <p className="text-gray-500 text-sm mt-1">{sermon.speaker} • {sermon.date}</p>
+              <p className="text-gray-500 text-sm mt-1">{sermon.speaker} • {formatDate(sermon.date)}</p>
             </div>
           ))}
         </div>
@@ -94,7 +105,7 @@ export default function SermonsPage() {
                   <div>
                     <span className="text-sm font-bold text-[#d4af37] uppercase tracking-widest">{selectedSermon.category}</span>
                     <h2 className="text-2xl font-bold text-[#0f172a] mt-1">{selectedSermon.title}</h2>
-                    <p className="text-gray-600 mt-1">{selectedSermon.speaker} • {selectedSermon.date}</p>
+                    <p className="text-gray-600 mt-1">{selectedSermon.speaker} • {formatDate(selectedSermon.date)}</p>
                   </div>
                   <button 
                     onClick={() => setSelectedSermon(null)}
