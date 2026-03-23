@@ -39,3 +39,52 @@ export async function POST(request) {
     return NextResponse.json({ error: "Erreur lors de la création de l'événement" }, { status: 500 });
   }
 }
+
+export async function PUT(request) {
+  try {
+    const body = await request.json();
+    const { id, title, date, time, location, description, image } = body;
+
+    if (!id || !title || !date || !location || !description) {
+      return NextResponse.json({ error: "Champs requis manquants" }, { status: 400 });
+    }
+
+    const result = await query(
+      `UPDATE "Event" 
+       SET title = $1, date = $2, time = $3, location = $4, description = $5, image = COALESCE($6, image)
+       WHERE id = $7 RETURNING *`,
+      [title, date, time, location, description, image, id]
+    );
+
+    if (result.rowCount === 0) {
+      return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, event: result.rows[0] });
+  } catch (error) {
+    console.error('Events PUT error:', error);
+    return NextResponse.json({ error: "Erreur lors de la modification" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: "ID requis" }, { status: 400 });
+    }
+
+    const result = await query('DELETE FROM "Event" WHERE id = $1 RETURNING *', [id]);
+
+    if (result.rowCount === 0) {
+      return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, message: "Événement supprimé" });
+  } catch (error) {
+    console.error('Events DELETE error:', error);
+    return NextResponse.json({ error: "Erreur lors de la suppression" }, { status: 500 });
+  }
+}
