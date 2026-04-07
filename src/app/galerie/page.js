@@ -6,9 +6,9 @@ import Navbar from "@/components/layout/Navbar";
 const CATEGORIES = [
   "Tous",
   "Culte dominical",
-  "Étude biblique",
-  "Jeûne et prière",
-  "Événements"
+  "Etude biblique",
+  "Jeune et priere",
+  "Evenements"
 ];
 
 export default function GaleriePage() {
@@ -46,10 +46,10 @@ export default function GaleriePage() {
             <Camera size={14} /> Notre Galerie
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4 tracking-tight">
-            Souvenirs de notre <span style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communauté</span>
+            Souvenirs de notre <span style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)', stroke: 'transparent', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communaute</span>
           </h1>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
-            Parcourez les moments forts de notre église à travers notre galerie photos.
+            Parcourez les moments forts de notre eglise a travers notre galerie photos.
             Vivez et revivez nos moments de culte et de partage.
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function GaleriePage() {
                 key={img.id} 
                 className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-white shadow-sm hover:shadow-2xl transition-all duration-500 cursor-zoom-in"
                 onClick={() => setSelectedImage(img)}
-                style={{ animationDelay: \`\${i * 50}ms\` }}
+                style={{ animationDelay: `${i * 50}ms` }}
               >
                 <img 
                   src={img.image} 
@@ -120,15 +120,15 @@ export default function GaleriePage() {
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6 text-gray-300">
               <ImageIcon size={40} />
             </div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-2">Aucune photo trouvée</h3>
+            <h3 className="text-2xl font-bold text-slate-800 mb-2">Aucune photo trouvee</h3>
             <p className="text-gray-500 text-lg leading-relaxed">
-              Désolé, nous n'avons pas encore de photos à afficher dans la catégorie <b>{activeCategory}</b>.
+              Desole, nous n'avons pas encore de photos a afficher dans la categorie <b>{activeCategory}</b>.
             </p>
             <button 
               onClick={() => setActiveCategory("Tous")}
               className="mt-8 text-indigo-600 font-bold hover:underline"
             >
-              Afficher toutes les photos →
+              Afficher toutes les photos
             </button>
           </div>
         )}
@@ -156,10 +156,10 @@ export default function GaleriePage() {
                 {selectedImage.category}
               </span>
               <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-tight">
-                {selectedImage.title || "Souvenir de l'église"}
+                {selectedImage.title || "Souvenir de l'eglise"}
               </h2>
               <p className="text-white/40 mt-1 text-sm">
-                Ajoutée le {new Date(selectedImage.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                Ajoutee le {new Date(selectedImage.createdAt).toLocaleDateString()}
               </p>
             </div>
           </div>
@@ -169,7 +169,7 @@ export default function GaleriePage() {
       {/* Footer Area / Call to action */}
       <footer className="bg-white border-t border-gray-100 py-10 mt-auto">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-gray-400 text-sm font-medium">© {new Date().getFullYear()} EDPST - Église de Dieu Parole Salut pour Tous</p>
+          <p className="text-gray-400 text-sm font-medium">EDPST - Eglise de Dieu Parole Salut pour Tous</p>
         </div>
       </footer>
     </div>

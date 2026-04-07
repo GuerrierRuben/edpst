@@ -4,9 +4,9 @@ import { Trash2, Upload, ImageIcon, Filter, CheckCircle, AlertCircle, X } from "
 
 const CATEGORIES = [
   "Culte dominical",
-  "Étude biblique",
-  "Jeûne et prière",
-  "Événements"
+  "Etude biblique",
+  "Jeune et priere",
+  "Evenements"
 ];
 
 export default function AdminGallery() {
@@ -63,7 +63,7 @@ export default function AdminGallery() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.image) {
-      showNotification("Veuillez sélectionner une image", "error");
+      showNotification("Veuillez selectionner une image", "error");
       return;
     }
 
@@ -76,7 +76,7 @@ export default function AdminGallery() {
       });
 
       if (res.ok) {
-        showNotification("Image ajoutée avec succès !");
+        showNotification("Image ajoutee avec succes !");
         setFormData({ title: "", category: CATEGORIES[0], image: "" });
         fetchImages();
       } else {
@@ -96,7 +96,7 @@ export default function AdminGallery() {
     try {
       const res = await fetch(`/api/gallery?id=${id}`, { method: "DELETE" });
       if (res.ok) {
-        showNotification("Image supprimée");
+        showNotification("Image supprimee");
         fetchImages();
       } else {
         showNotification("Erreur lors de la suppression", "error");
@@ -108,11 +108,10 @@ export default function AdminGallery() {
 
   return (
     <div className="space-y-8 pb-20">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Gestion de la Galerie</h1>
-          <p className="text-gray-500 text-sm">Ajoutez et gérez les photos souvenir de l'église.</p>
+          <p className="text-gray-500 text-sm">Ajoutez et gerez les photos souvenir de l'eglise.</p>
         </div>
         <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
           <Filter size={16} className="text-gray-400 ml-2" />
@@ -121,14 +120,13 @@ export default function AdminGallery() {
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
-            <option value="Tous">Toutes les catégories</option>
+            <option value="Tous">Toutes les categories</option>
             {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
           </select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Upload Form */}
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
@@ -148,7 +146,7 @@ export default function AdminGallery() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-1.5 ml-1">Catégorie</label>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-1.5 ml-1">Categorie</label>
                 <select
                   className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all bg-gray-50/30 font-medium"
                   value={formData.category}
@@ -209,7 +207,6 @@ export default function AdminGallery() {
           </div>
         </div>
 
-        {/* Gallery Grid */}
         <div className="lg:col-span-2">
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 animate-pulse">
@@ -226,8 +223,6 @@ export default function AdminGallery() {
                     alt={img.title || ""} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                   />
-                  
-                  {/* Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
                     <p className="text-white text-xs font-bold mb-1 line-clamp-1">{img.title || "Sans titre"}</p>
                     <div className="flex items-center justify-between">
@@ -251,14 +246,13 @@ export default function AdminGallery() {
               <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
                 <ImageIcon size={32} />
               </div>
-              <h3 className="text-lg font-bold text-slate-800 mb-1">Aucune photo trouvée</h3>
-              <p className="text-gray-500 text-sm">Commencez par ajouter des photos dans cette catégorie ou en changeant le filtre.</p>
+              <h3 className="text-lg font-bold text-slate-800 mb-1">Aucune photo trouvee</h3>
+              <p className="text-gray-500 text-sm">Commencez par ajouter des photos dans cette categorie ou en changeant le filtre.</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Notifications */}
       {notification && (
         <div className={`fixed bottom-8 right-8 z-50 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl animate-in slide-in-from-bottom border ${notification.type === 'error' ? 'bg-red-50 border-red-100 text-red-800' : 'bg-emerald-50 border-emerald-100 text-emerald-800'}`}>
           {notification.type === 'error' ? <AlertCircle size={20} className="text-red-500" /> : <CheckCircle size={20} className="text-emerald-500" />}
