@@ -5,6 +5,7 @@ import { Menu, X, Search } from 'lucide-react';
 
 const navLinks = [
   { label: 'Accueil', href: '/' },
+  { label: 'Galerie', href: '/galerie' },
   { label: 'Messages', href: '/sermons' },
   { label: 'Contact', href: '/contact' },
 ];

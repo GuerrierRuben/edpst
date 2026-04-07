@@ -6,6 +6,7 @@ export default function AdminLayout({ children }) {
     { name: 'Articles Blog', href: '/admin/blog', icon: '📝' },
     { name: 'Sermons', href: '/admin/sermons', icon: '🎤' },
     { name: 'Événements', href: '/admin/events', icon: '📅' },
+    { name: 'Galerie', href: '/admin/gallery', icon: '🖼️' },
     // AJOUT DU PROGRAMME ICI
     { name: 'Programme Culte', href: '/admin/programme', icon: '⏰' },
     { name: 'Messages', href: '/admin/contacts', icon: '📩' },

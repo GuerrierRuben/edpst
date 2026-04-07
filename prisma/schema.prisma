@@ -57,3 +57,11 @@ model Contact {
   status    String   @default("en_attente")
   createdAt DateTime @default(now())
 }
+
+model Gallery {
+  id        String   @id @default(uuid())
+  title     String?
+  image     String   // Base64 string
+  category  String   // e.g., "Culte dominical", "Étude biblique", etc.
+  createdAt DateTime @default(now())
+}
