@@ -27,9 +27,10 @@ export async function POST(request) {
     }
 
     console.log('💾 Insertion dans la base de données...');
+    const id = crypto.randomUUID();
     const result = await query(
-      'INSERT INTO "Event" (title, date, time, location, description, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [title, date, time, location, description, image]
+      'INSERT INTO "Event" (id, title, date, time, location, description, image) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [id, title, date, time, location, description, image]
     );
 
     console.log('✅ Événement créé avec succès:', result.rows[0].id);
