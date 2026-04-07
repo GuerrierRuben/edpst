@@ -1,7 +1,8 @@
+require('dotenv').config();
 const { Pool } = require('pg');
 
 const pool = new Pool({
-    connectionString: "postgresql://postgres:Best_Dev_Ever_Is_Benly@localhost:5432/edpst",
+    connectionString: process.env.DATABASE_URL,
     connectionTimeoutMillis: 5000,
 });
 

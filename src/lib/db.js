@@ -6,7 +6,9 @@ const poolConfig = {
   max: 10, // Moderate connection limit for dev environment
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000, // Increased to 10s to prevent timeouts
-  ssl: process.env.DATABASE_URL?.includes('supabase.co') ? { rejectUnauthorized: false } : false
+  ssl: process.env.DATABASE_URL?.includes('supabase.') || process.env.NODE_ENV === 'production'
+    ? { rejectUnauthorized: false } 
+    : false
 };
 
 // Singleton pattern for development
