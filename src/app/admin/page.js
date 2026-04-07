@@ -27,12 +27,14 @@ export default async function AdminDashboard() {
     latestEvents,
     latestSermons,
     latestPosts,
-    incompleteSermons
+    incompleteSermons,
+    galleryCount
   ] = await Promise.all([
     safeQuery('SELECT count(*) FROM "Post"'),
     safeQuery('SELECT count(*) FROM "Event"'),
     safeQuery('SELECT count(*) FROM "Sermon"'),
     safeQuery('SELECT count(*) FROM "Contact" WHERE status = \'en_attente\''),
+    safeQuery('SELECT count(*) FROM "Gallery"'),
     safeQuery('SELECT id, title, date, location FROM "Event" ORDER BY date DESC LIMIT 5'),
     safeQuery('SELECT id, title, speaker, date, "videoUrl", thumbnail FROM "Sermon" ORDER BY id DESC LIMIT 5'),
     safeQuery('SELECT id, title, category, author, "createdAt" FROM "Post" ORDER BY "createdAt" DESC LIMIT 5'),
@@ -46,6 +48,7 @@ export default async function AdminDashboard() {
     { label: 'Événements', value: getCount(eventsCount), icon: <Calendar size={24} />, color: 'text-blue-600', bg: 'bg-blue-50', link: '/admin/events' },
     { label: 'Sermons', value: getCount(sermonsCount), icon: <Mic size={24} />, color: 'text-emerald-600', bg: 'bg-emerald-50', link: '/admin/sermons' },
     { label: 'Messages', value: getCount(contactsCount), icon: <MessageSquare size={24} />, color: 'text-red-600', bg: 'bg-red-50', link: '/admin/messages' },
+    { label: 'Galerie', value: getCount(galleryCount), icon: <Activity size={24} />, color: 'text-indigo-600', bg: 'bg-indigo-50', link: '/admin/gallery' },
   ];
 
   const incompleteSermonsValue = parseInt(getCount(incompleteSermons));
@@ -75,7 +78,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
@@ -110,7 +113,7 @@ export default async function AdminDashboard() {
         <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
           <Activity size={20} className="text-indigo-600" /> Actions Rapides
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <QuickActionCard
             title="Nouvel Événement"
             color="bg-blue-600"
@@ -139,6 +142,13 @@ export default async function AdminDashboard() {
             link="/admin/messages"
             createLink="/admin/messages"
             hideCreate
+          />
+          <QuickActionCard
+            title="Gérer Galerie"
+            color="bg-indigo-600"
+            icon={<Activity className="text-white" />}
+            link="/admin/gallery"
+            createLink="/admin/gallery"
           />
         </div>
       </div>
