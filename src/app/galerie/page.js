@@ -16,6 +16,32 @@ export default function GaleriePage() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message) => {
+    setToast(message);
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleShare = async (e, img) => {
+    e.stopPropagation(); // Empecher l'ouverture de la lightbox si on clique sur partager
+    const shareData = {
+      title: img.title || "Photo Galerie - EDPST",
+      text: `Decouvrez cette photo de l'eglise EDPST : ${img.title || ""}`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        showToast("Lien de la galerie copie !");
+      }
+    } catch (err) {
+      console.error("Erreur de partage:", err);
+    }
+  };
 
   const fetchImages = async () => {
     setLoading(true);
@@ -107,7 +133,10 @@ export default function GaleriePage() {
                     <button className="flex-1 bg-white hover:bg-gray-100 text-slate-900 py-2 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2">
                       <Maximize2 size={12} /> Agrandir
                     </button>
-                    <button className="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-xl flex items-center justify-center transition-colors">
+                    <button 
+                      onClick={(e) => handleShare(e, img)}
+                      className="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-xl flex items-center justify-center transition-colors"
+                    >
                       <Share2 size={14} />
                     </button>
                   </div>
@@ -161,8 +190,23 @@ export default function GaleriePage() {
               <p className="text-white/40 mt-1 text-sm">
                 Ajoutee le {new Date(selectedImage.createdAt).toLocaleDateString()}
               </p>
+              <div className="mt-8 flex justify-center">
+                <button 
+                  onClick={(e) => handleShare(e, selectedImage)}
+                  className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full font-bold transition-all border border-white/20"
+                >
+                  <Share2 size={18} /> Partager cette photo
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] bg-slate-900 shadow-2xl text-white px-6 py-3 rounded-full font-bold text-sm animate-in fade-in slide-in-from-bottom-4 duration-300">
+          {toast}
         </div>
       )}
 
