@@ -19,8 +19,9 @@ export default function AdminGallery() {
   const [formData, setFormData] = useState({
     title: "",
     category: CATEGORIES[0],
-    image: ""
   });
+  const [selectedImages, setSelectedImages] = useState([]); // Array of base64 strings
+  const [currentUploadIndex, setCurrentUploadIndex] = useState(0);
 
   const showNotification = (message, type = "success") => {
     setNotification({ message, type });
@@ -46,43 +47,68 @@ export default function AdminGallery() {
   }, [filter]);
 
   const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 1 * 1024 * 1024) {
-        showNotification("L'image est trop lourde (max 1Mo)", "error");
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    const newImages = [];
+    let processedCount = 0;
+
+    files.forEach(file => {
+      if (file.size > 2 * 1024 * 1024) {
+        showNotification(`${file.name} est trop lourde (max 2Mo)`, "error");
         return;
       }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData({ ...formData, image: reader.result });
+        newImages.push(reader.result);
+        processedCount++;
+        if (processedCount === files.length) {
+          setSelectedImages([...selectedImages, ...newImages]);
+        }
       };
       reader.readAsDataURL(file);
-    }
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.image) {
-      showNotification("Veuillez selectionner une image", "error");
+    if (selectedImages.length === 0) {
+      showNotification("Veuillez selectionner au moins une image", "error");
       return;
     }
 
     setUploading(true);
-    try {
-      const res = await fetch("/api/gallery", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    let successCount = 0;
 
-      if (res.ok) {
-        showNotification("Image ajoutee avec succes !");
-        setFormData({ title: "", category: CATEGORIES[0], image: "" });
-        fetchImages();
-      } else {
-        const err = await res.json();
-        showNotification(err.error || "Une erreur est survenue", "error");
+    try {
+      for (let i = 0; i < selectedImages.length; i++) {
+        setCurrentUploadIndex(i + 1);
+        const res = await fetch("/api/gallery", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: formData.title,
+            category: formData.category,
+            image: selectedImages[i]
+          }),
+        });
+
+        if (res.ok) {
+          successCount++;
+        }
       }
+
+      if (successCount === selectedImages.length) {
+        showNotification(`${successCount} images ajoutees avec succes !`);
+      } else {
+        showNotification(`${successCount}/${selectedImages.length} images ajoutees.`, "warning");
+      }
+      
+      setFormData({ title: "", category: CATEGORIES[0] });
+      setSelectedImages([]);
+      setCurrentUploadIndex(0);
+      fetchImages();
     } catch (error) {
       showNotification("Erreur de connexion", "error");
     } finally {
@@ -130,12 +156,12 @@ export default function AdminGallery() {
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-              <Upload size={20} className="text-indigo-600" /> Ajouter une photo
+              <Upload size={20} className="text-indigo-600" /> Ajouter des photos
             </h2>
             
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-1.5 ml-1">Titre (Optionnel)</label>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-1.5 ml-1">Titre (Applique a toutes)</label>
                 <input
                   type="text"
                   className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all bg-gray-50/30"
@@ -157,15 +183,19 @@ export default function AdminGallery() {
               </div>
 
               <div className="group">
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-1.5 ml-1">Fichier Photo</label>
-                <div className={`relative border-2 border-dashed rounded-2xl p-4 transition-all flex flex-col items-center justify-center min-h-[200px] overflow-hidden ${formData.image ? 'border-emerald-500/50 bg-emerald-50/10' : 'border-gray-200 hover:border-indigo-500 hover:bg-gray-50' }`}>
-                  {formData.image ? (
-                    <div className="relative w-full aspect-square">
-                      <img src={formData.image} className="w-full h-full object-cover rounded-xl" alt="Preview" />
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-1.5 ml-1">Fichiers Photos</label>
+                <div className={`relative border-2 border-dashed rounded-2xl p-4 transition-all flex flex-col items-center justify-center min-h-[200px] overflow-hidden ${selectedImages.length > 0 ? 'border-emerald-500/50 bg-emerald-50/10' : 'border-gray-200 hover:border-indigo-500 hover:bg-gray-50' }`}>
+                  {selectedImages.length > 0 ? (
+                    <div className="grid grid-cols-3 gap-2 w-full">
+                      {selectedImages.map((img, idx) => (
+                        <div key={idx} className="relative aspect-square">
+                          <img src={img} className="w-full h-full object-cover rounded-lg" alt="Preview" />
+                        </div>
+                      ))}
                       <button 
                         type="button" 
-                        onClick={() => setFormData({ ...formData, image: "" })}
-                        className="absolute -top-1 -right-1 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:bg-red-600 transition-transform hover:scale-110"
+                        onClick={() => setSelectedImages([])}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:bg-red-600"
                       >
                         <X size={14} />
                       </button>
@@ -175,16 +205,22 @@ export default function AdminGallery() {
                       <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                         <ImageIcon size={24} className="text-gray-400 group-hover:text-indigo-600" />
                       </div>
-                      <p className="text-xs text-gray-400 font-medium text-center px-4">Glissez une photo ou cliquez pour parcourir (Max 1Mo)</p>
+                      <p className="text-xs text-gray-400 font-medium text-center px-4">Selectionnez plusieurs photos ou glissez-les ici (Max 2Mo/u)</p>
                     </>
                   )}
                   <input
                     type="file"
+                    multiple
                     accept="image/*"
                     className="absolute inset-0 opacity-0 cursor-pointer"
                     onChange={handleFileUpload}
                   />
                 </div>
+                {selectedImages.length > 0 && (
+                  <p className="text-[10px] text-emerald-600 font-bold mt-2 text-center uppercase">
+                    {selectedImages.length} photo(s) selectionnee(s)
+                  </p>
+                )}
               </div>
 
               <button
@@ -195,11 +231,11 @@ export default function AdminGallery() {
                 {uploading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Envoi en cours...
+                    Envoi de {currentUploadIndex} sur {selectedImages.length}...
                   </>
                 ) : (
                   <>
-                    <Upload size={18} /> Publier dans la galerie
+                    <Upload size={18} /> Publier la selection
                   </>
                 )}
               </button>
