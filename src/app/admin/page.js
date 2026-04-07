@@ -8,7 +8,17 @@ import {
 } from "lucide-react";
 
 export default async function AdminDashboard() {
-  // Récupération parallèle des données
+  // Fonction utilitaire pour exécuter une requête avec une valeur par défaut en cas d'erreur
+  const safeQuery = async (queryString, defaultValue = { rows: [] }) => {
+    try {
+      return await query(queryString);
+    } catch (error) {
+      console.error(`Query error for: ${queryString}`, error);
+      return defaultValue;
+    }
+  };
+
+  // Récupération parallèle des données avec sécurité
   const [
     postsCount,
     eventsCount,
@@ -19,24 +29,26 @@ export default async function AdminDashboard() {
     latestPosts,
     incompleteSermons
   ] = await Promise.all([
-    query('SELECT count(*) FROM "Post"'),
-    query('SELECT count(*) FROM "Event"'),
-    query('SELECT count(*) FROM "Sermon"'),
-    query('SELECT count(*) FROM "Contact" WHERE status = \'en_attente\''),
-    query('SELECT id, title, date, location FROM "Event" ORDER BY date DESC LIMIT 5'),
-    query('SELECT id, title, speaker, date, "videoUrl", thumbnail FROM "Sermon" ORDER BY id DESC LIMIT 5'),
-    query('SELECT id, title, category, author, "createdAt" FROM "Post" ORDER BY "createdAt" DESC LIMIT 5'),
-    query('SELECT count(*) FROM "Sermon" WHERE "videoUrl" IS NULL OR "videoUrl" = \'\'')
+    safeQuery('SELECT count(*) FROM "Post"'),
+    safeQuery('SELECT count(*) FROM "Event"'),
+    safeQuery('SELECT count(*) FROM "Sermon"'),
+    safeQuery('SELECT count(*) FROM "Contact" WHERE status = \'en_attente\''),
+    safeQuery('SELECT id, title, date, location FROM "Event" ORDER BY date DESC LIMIT 5'),
+    safeQuery('SELECT id, title, speaker, date, "videoUrl", thumbnail FROM "Sermon" ORDER BY id DESC LIMIT 5'),
+    safeQuery('SELECT id, title, category, author, "createdAt" FROM "Post" ORDER BY "createdAt" DESC LIMIT 5'),
+    safeQuery('SELECT count(*) FROM "Sermon" WHERE "videoUrl" IS NULL OR "videoUrl" = \'\'')
   ]);
 
+  const getCount = (res) => res?.rows?.[0]?.count ?? 0;
+
   const stats = [
-    { label: 'Articles', value: postsCount.rows[0].count, icon: <FileText size={24} />, color: 'text-amber-600', bg: 'bg-amber-50', link: '/admin/blog' },
-    { label: 'Événements', value: eventsCount.rows[0].count, icon: <Calendar size={24} />, color: 'text-blue-600', bg: 'bg-blue-50', link: '/admin/events' },
-    { label: 'Sermons', value: sermonsCount.rows[0].count, icon: <Mic size={24} />, color: 'text-emerald-600', bg: 'bg-emerald-50', link: '/admin/sermons' },
-    { label: 'Messages', value: contactsCount.rows[0].count, icon: <MessageSquare size={24} />, color: 'text-red-600', bg: 'bg-red-50', link: '/admin/messages' },
+    { label: 'Articles', value: getCount(postsCount), icon: <FileText size={24} />, color: 'text-amber-600', bg: 'bg-amber-50', link: '/admin/blog' },
+    { label: 'Événements', value: getCount(eventsCount), icon: <Calendar size={24} />, color: 'text-blue-600', bg: 'bg-blue-50', link: '/admin/events' },
+    { label: 'Sermons', value: getCount(sermonsCount), icon: <Mic size={24} />, color: 'text-emerald-600', bg: 'bg-emerald-50', link: '/admin/sermons' },
+    { label: 'Messages', value: getCount(contactsCount), icon: <MessageSquare size={24} />, color: 'text-red-600', bg: 'bg-red-50', link: '/admin/messages' },
   ];
 
-  const incompleteSermonsValue = parseInt(incompleteSermons.rows[0].count);
+  const incompleteSermonsValue = parseInt(getCount(incompleteSermons));
 
   return (
     <div className="space-y-8 pb-10">
