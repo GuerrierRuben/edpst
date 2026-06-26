@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Trash2, Upload, ImageIcon, Filter, CheckCircle, AlertCircle, X } from "lucide-react";
+import { Trash2, Upload, ImageIcon, Filter, CheckCircle, AlertCircle, X, AlertTriangle } from "lucide-react";
 import Image from "next/image";
 
 const CATEGORIES = [
@@ -148,25 +148,52 @@ export default function AdminGallery() {
     }
   };
 
+  const clearGallery = async () => {
+    if (!confirm("ATTENTION : Voulez-vous vraiment supprimer TOUTES les images de la galerie ? Cette action est irréversible.")) return;
+    
+    try {
+      const res = await fetch("/api/gallery/clear", { method: "DELETE" });
+      const data = await res.json();
+      
+      if (res.ok) {
+        showNotification(data.message || "Galerie vidée avec succès");
+        fetchImages();
+      } else {
+        showNotification(data.error || "Erreur lors de la suppression", "error");
+      }
+    } catch (error) {
+      showNotification("Erreur de connexion", "error");
+    }
+  };
+
   return (
     <div className="space-y-8 pb-20">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-800">Gestion de la Galerie</h1>
-          <p className="text-gray-500 text-sm">Ajoutez et gerez les photos souvenir de l'eglise.</p>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">Gestion de la Galerie</h1>
+            <p className="text-gray-500 text-sm">Ajoutez et gerez les photos souvenir de l'eglise.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
+              <Filter size={16} className="text-gray-400 ml-2" />
+              <select 
+                className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer pr-8"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              >
+                <option value="Tous">Toutes les categories</option>
+                {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              </select>
+            </div>
+            <button
+              onClick={clearGallery}
+              className="flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2.5 rounded-xl border border-red-200 transition-all font-bold text-sm"
+            >
+              <AlertTriangle size={16} />
+              Vider la galerie
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-xl border border-gray-100">
-          <Filter size={16} className="text-gray-400 ml-2" />
-          <select 
-            className="bg-transparent border-none text-sm font-medium focus:ring-0 cursor-pointer pr-8"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <option value="Tous">Toutes les categories</option>
-            {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-          </select>
-        </div>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6">
