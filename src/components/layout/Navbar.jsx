@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const navLinks = [
   { label: 'Accueil', href: '/' },
@@ -17,17 +17,9 @@ export default function Navbar() {
     <nav className="fixed w-full z-50 bg-white shadow-sm border-b border-gray-100 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
 
-        {/* LOGO — original text, new style */}
+        {/* LOGO */}
         <Link href="/" className="flex items-center gap-2.5 relative z-50">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center"
-               style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)' }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <span className="text-xl font-bold text-[#1a1a2e] tracking-tight">
-            ÉGLISE<span style={{ color: '#7B2FBE' }}>LOGO</span>
-          </span>
+          <img src="/logo.svg" alt="Église de Petit Paradis" className="h-16 w-auto" />
         </Link>
 
         {/* DESKTOP MENU */}
@@ -36,23 +28,20 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="relative hover:text-[#7B2FBE] transition-colors duration-200 group"
+              className="relative hover:text-[#E07800] transition-colors duration-200 group"
             >
               {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#E91E8C] group-hover:w-full transition-all duration-300 rounded-full" />
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#F79400] group-hover:w-full transition-all duration-300 rounded-full" />
             </Link>
           ))}
         </div>
 
         {/* ACTIONS */}
         <div className="hidden md:flex items-center gap-4">
-          <button className="p-2 text-gray-400 hover:text-[#7B2FBE] transition" aria-label="Rechercher">
-            <Search size={19} />
-          </button>
           <Link
             href="/contact"
             className="text-sm font-semibold text-white px-5 py-2.5 rounded-full transition-all duration-300 hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)', boxShadow: '0 4px 15px rgba(233,30,140,0.30)' }}
+            style={{ background: 'linear-gradient(135deg, #FFB830, #F79400)', boxShadow: '0 4px 15px rgba(247,148,0,0.30)' }}
           >
             Nous Rejoindre →
           </Link>
@@ -60,7 +49,7 @@ export default function Navbar() {
 
         {/* MOBILE TOGGLE */}
         <button
-          className="md:hidden relative z-50 p-2 text-[#1a1a2e] hover:text-[#7B2FBE] rounded-lg transition"
+          className="md:hidden relative z-50 p-2 text-[#1a1a2e] hover:text-[#E07800] rounded-lg transition"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
@@ -75,7 +64,7 @@ export default function Navbar() {
             key={link.href}
             href={link.href}
             onClick={() => setIsOpen(false)}
-            className="text-2xl font-semibold text-[#1a1a2e] hover:text-[#7B2FBE] transition-colors duration-200"
+            className="text-2xl font-semibold text-[#1a1a2e] hover:text-[#E07800] transition-colors duration-200"
           >
             {link.label}
           </Link>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   Calendar, Mic, FileText, MessageSquare,
   Plus, AlertTriangle, CheckCircle, Video,
-  ArrowRight, Users, Activity
+  ArrowRight, Users, Activity, UserCheck
 } from "lucide-react";
 
 export default async function AdminDashboard() {
@@ -24,17 +24,19 @@ export default async function AdminDashboard() {
     eventsCount,
     sermonsCount,
     contactsCount,
+    galleryCount,
+    ministriesCount,
     latestEvents,
     latestSermons,
     latestPosts,
-    incompleteSermons,
-    galleryCount
+    incompleteSermons
   ] = await Promise.all([
     safeQuery('SELECT count(*) FROM "Post"'),
     safeQuery('SELECT count(*) FROM "Event"'),
     safeQuery('SELECT count(*) FROM "Sermon"'),
     safeQuery('SELECT count(*) FROM "Contact" WHERE status = \'en_attente\''),
     safeQuery('SELECT count(*) FROM "Gallery"'),
+    safeQuery('SELECT count(*) FROM "Ministry"'),
     safeQuery('SELECT id, title, date, location FROM "Event" ORDER BY date DESC LIMIT 5'),
     safeQuery('SELECT id, title, speaker, date, "videoUrl", thumbnail FROM "Sermon" ORDER BY id DESC LIMIT 5'),
     safeQuery('SELECT id, title, category, author, "createdAt" FROM "Post" ORDER BY "createdAt" DESC LIMIT 5'),
@@ -49,6 +51,7 @@ export default async function AdminDashboard() {
     { label: 'Sermons', value: getCount(sermonsCount), icon: <Mic size={24} />, color: 'text-emerald-600', bg: 'bg-emerald-50', link: '/admin/sermons' },
     { label: 'Messages', value: getCount(contactsCount), icon: <MessageSquare size={24} />, color: 'text-red-600', bg: 'bg-red-50', link: '/admin/messages' },
     { label: 'Galerie', value: getCount(galleryCount), icon: <Activity size={24} />, color: 'text-indigo-600', bg: 'bg-indigo-50', link: '/admin/gallery' },
+    { label: 'Ministères', value: getCount(ministriesCount), icon: <UserCheck size={24} />, color: 'text-purple-600', bg: 'bg-purple-50', link: '/admin/ministeres' },
   ];
 
   const incompleteSermonsValue = parseInt(getCount(incompleteSermons));
@@ -78,7 +81,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
         {stats.map((stat) => (
           <div key={stat.label} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
@@ -149,6 +152,13 @@ export default async function AdminDashboard() {
             icon={<Activity className="text-white" />}
             link="/admin/gallery"
             createLink="/admin/gallery"
+          />
+          <QuickActionCard
+            title="Gérer Ministères"
+            color="bg-purple-600"
+            icon={<UserCheck className="text-white" />}
+            link="/admin/ministeres"
+            createLink="/admin/ministeres"
           />
         </div>
       </div>

@@ -48,18 +48,10 @@ export default function Footer() {
     <footer style={{ background: '#0d0d1a' }} className="text-white">
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
 
-        {/* Col 1 : Logo + description originale */}
+        {/* Col 1 : Logo + description */}
         <div className="md:col-span-2">
           <Link href="/" className="flex items-center gap-2.5 mb-5">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center"
-                 style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <span className="text-xl font-bold tracking-tight">
-              ÉGLISE<span style={{ color: '#7B2FBE' }}>LOGO</span>
-            </span>
+            <img src="/logo.svg" alt="Église de Petit Paradis" className="h-20 w-auto" />
           </Link>
           <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
             Une église au cœur de la ville, passionnée par Jésus et dévouée à servir notre communauté.
@@ -71,13 +63,13 @@ export default function Footer() {
           <h4 className="font-semibold mb-5 text-white text-sm tracking-wide uppercase">Liens Rapides</h4>
           <ul className="space-y-3 text-sm text-gray-400">
             <li>
-              <Link href="/a-propos" className="hover:text-[#E91E8C] transition-colors duration-200">À propos</Link>
+              <Link href="/a-propos" className="hover:text-[#F79400] transition-colors duration-200">À propos</Link>
             </li>
             <li>
-              <Link href="/donner" className="hover:text-[#E91E8C] transition-colors duration-200">Donner</Link>
+              <Link href="/donner" className="hover:text-[#F79400] transition-colors duration-200">Donner</Link>
             </li>
             <li>
-              <Link href="/ministeres" className="hover:text-[#E91E8C] transition-colors duration-200">Ministères</Link>
+              <Link href="/ministeres" className="hover:text-[#F79400] transition-colors duration-200">Ministères</Link>
             </li>
           </ul>
         </div>
@@ -95,7 +87,7 @@ export default function Footer() {
                 key={s.label}
                 href={s.href}
                 aria-label={s.label}
-                className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-gray-400 hover:text-white hover:border-[#7B2FBE] hover:bg-[#7B2FBE]/20 transition-all duration-200"
+                className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-gray-400 hover:text-white hover:border-[#F79400] hover:bg-[#F79400]/20 transition-all duration-200"
               >
                 {s.icon}
               </a>

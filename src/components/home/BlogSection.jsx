@@ -17,7 +17,7 @@ export default function BlogSection({ posts }) {
         {/* Section Header */}
         <div className="mb-12 text-center">
           <h2 className="section-title">Derniers Articles</h2>
-          <div className="mt-3 mx-auto w-16 h-1 rounded-full" style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)' }} />
+          <div className="mt-3 mx-auto w-16 h-1 rounded-full" style={{ background: 'linear-gradient(135deg, #FFB830, #F79400)' }} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -43,7 +43,7 @@ export default function BlogSection({ posts }) {
               </p>
 
               {/* Title */}
-              <h3 className="text-lg font-bold text-[#1a1a2e] mb-2 leading-snug group-hover:text-[#7B2FBE] transition-colors duration-200">
+              <h3 className="text-lg font-bold text-[#1a1a2e] mb-2 leading-snug group-hover:text-[#E07800] transition-colors duration-200">
                 {post.title}
               </h3>
 
@@ -51,7 +51,7 @@ export default function BlogSection({ posts }) {
               <p className="text-gray-500 text-sm line-clamp-2">{post.excerpt}</p>
 
               {/* Read more link */}
-              <span className="inline-flex items-center gap-1 text-[#E91E8C] text-sm font-semibold mt-3 group-hover:gap-2 transition-all duration-200">
+              <span className="inline-flex items-center gap-1 text-[#F79400] text-sm font-semibold mt-3 group-hover:gap-2 transition-all duration-200">
                 Lire la suite
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                   <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>

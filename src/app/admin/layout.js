@@ -1,4 +1,16 @@
 import Link from 'next/link';
+import { BarChart3, FileText, Mic, Calendar, Image, Users, Clock, Mail } from 'lucide-react';
+
+const iconMap = {
+  '📊': BarChart3,
+  '📝': FileText,
+  '🎤': Mic,
+  '📅': Calendar,
+  '🖼️': Image,
+  '👥': Users,
+  '⏰': Clock,
+  '📩': Mail,
+};
 
 export default function AdminLayout({ children }) {
   const menuItems = [
@@ -7,7 +19,7 @@ export default function AdminLayout({ children }) {
     { name: 'Sermons', href: '/admin/sermons', icon: '🎤' },
     { name: 'Événements', href: '/admin/events', icon: '📅' },
     { name: 'Galerie', href: '/admin/gallery', icon: '🖼️' },
-    // AJOUT DU PROGRAMME ICI
+    { name: 'Ministères', href: '/admin/ministeres', icon: '👥' },
     { name: 'Programme Culte', href: '/admin/programme', icon: '⏰' },
     { name: 'Messages', href: '/admin/contacts', icon: '📩' },
   ];
@@ -18,16 +30,19 @@ export default function AdminLayout({ children }) {
       <aside className="w-64 bg-[#0f172a] text-white p-6 fixed h-full">
         <h2 className="text-2xl font-bold mb-8 text-[#d4af37]">Admin Église</h2>
         <nav className="space-y-4">
-          {menuItems.map((item) => (
-            <Link 
-              key={item.href} 
-              href={item.href} 
-              className="flex items-center space-x-3 p-3 rounded hover:bg-slate-800 transition"
-            >
-              <span className="text-xl">{item.icon}</span>
-              <span className="font-medium">{item.name}</span>
-            </Link>
-          ))}
+          {menuItems.map((item) => {
+            const IconComponent = iconMap[item.icon];
+            return (
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                className="flex items-center space-x-3 p-3 rounded hover:bg-slate-800 transition"
+              >
+                {IconComponent && <IconComponent className="w-5 h-5" />}
+                <span className="font-medium">{item.name}</span>
+              </Link>
+            );
+          })}
         </nav>
         <div className="absolute bottom-10">
           <Link href="/" className="text-sm text-gray-400 hover:text-white">

@@ -5,6 +5,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
+    const limit = searchParams.get('limit');
     
     let sql = 'SELECT * FROM "Gallery" ORDER BY "createdAt" DESC';
     let params = [];
@@ -12,6 +13,15 @@ export async function GET(request) {
     if (category && category !== 'Tous') {
       sql = 'SELECT * FROM "Gallery" WHERE category = $1 ORDER BY "createdAt" DESC';
       params = [category];
+    }
+    
+    // Ajouter LIMIT si spécifié
+    if (limit) {
+      const limitNum = parseInt(limit);
+      if (!isNaN(limitNum) && limitNum > 0) {
+        sql += ` LIMIT $${params.length + 1}`;
+        params.push(limitNum);
+      }
     }
     
     const result = await query(sql, params);

@@ -54,8 +54,8 @@ export default function AdminGallery() {
     let processedCount = 0;
 
     files.forEach(file => {
-      if (file.size > 2 * 1024 * 1024) {
-        showNotification(`${file.name} est trop lourde (max 2Mo)`, "error");
+      if (file.size > 8 * 1024 * 1024) {
+        showNotification(`${file.name} est trop lourde (max 8Mo)`, "error");
         return;
       }
 
@@ -205,7 +205,7 @@ export default function AdminGallery() {
                       <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                         <ImageIcon size={24} className="text-gray-400 group-hover:text-indigo-600" />
                       </div>
-                      <p className="text-xs text-gray-400 font-medium text-center px-4">Selectionnez plusieurs photos ou glissez-les ici (Max 2Mo/u)</p>
+                       <p className="text-xs text-gray-400 font-medium text-center px-4">Selectionnez plusieurs photos ou glissez-les ici (Max 8Mo/u)</p>
                     </>
                   )}
                   <input

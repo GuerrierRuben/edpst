@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Mic, BookOpen, Book, Megaphone, Heart } from 'lucide-react';
 
 export default function ProgrammePublic() {
   const [programmes, setProgrammes] = useState([]);
@@ -84,31 +85,31 @@ export default function ProgrammePublic() {
                     {item.activity || "ACTIVITÉ"}
                   </h2>
                   <div className="mt-3 space-y-1">
-                    {item.leader && (
-                      <p className="text-base md:text-lg text-slate-500 font-medium italic">
-                        🎤 Dirigeant : <span className="text-slate-900 font-bold not-italic">{item.leader}</span>
-                      </p>
-                    )}
-                    {item.messenger && (
-                      <p className="text-base md:text-lg text-slate-500 font-medium italic">
-                        📖 Messager : <span className="text-slate-900 font-bold not-italic">{item.messenger}</span>
-                      </p>
-                    )}
-                    {item.reader && (
-                      <p className="text-base md:text-lg text-slate-500 font-medium italic">
-                        📚 Lecteur : <span className="text-slate-900 font-bold not-italic">{item.reader}</span>
-                      </p>
-                    )}
-                    {item.announcer && (
-                      <p className="text-base md:text-lg text-slate-500 font-medium italic">
-                        📣 Annonceur : <span className="text-slate-900 font-bold not-italic">{item.announcer}</span>
-                      </p>
-                    )}
-                    {item.prayer && (
-                      <p className="text-base md:text-lg text-slate-500 font-medium italic">
-                        🙏 Prière : <span className="text-slate-900 font-bold not-italic">{item.prayer}</span>
-                      </p>
-                    )}
+                     {item.leader && (
+                       <p className="text-base md:text-lg text-slate-500 font-medium italic flex items-center gap-2">
+                         <Mic className="w-4 h-4" /> Dirigeant : <span className="text-slate-900 font-bold not-italic">{item.leader}</span>
+                       </p>
+                     )}
+                     {item.messenger && (
+                       <p className="text-base md:text-lg text-slate-500 font-medium italic flex items-center gap-2">
+                         <BookOpen className="w-4 h-4" /> Messager : <span className="text-slate-900 font-bold not-italic">{item.messenger}</span>
+                       </p>
+                     )}
+                     {item.reader && (
+                       <p className="text-base md:text-lg text-slate-500 font-medium italic flex items-center gap-2">
+                         <Book className="w-4 h-4" /> Lecteur : <span className="text-slate-900 font-bold not-italic">{item.reader}</span>
+                       </p>
+                     )}
+                     {item.announcer && (
+                       <p className="text-base md:text-lg text-slate-500 font-medium italic flex items-center gap-2">
+                         <Megaphone className="w-4 h-4" /> Annonceur : <span className="text-slate-900 font-bold not-italic">{item.announcer}</span>
+                       </p>
+                     )}
+                     {item.prayer && (
+                       <p className="text-base md:text-lg text-slate-500 font-medium italic flex items-center gap-2">
+                         <Heart className="w-4 h-4" /> Prière : <span className="text-slate-900 font-bold not-italic">{item.prayer}</span>
+                       </p>
+                     )}
                   </div>
                 </div>
               </div>

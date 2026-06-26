@@ -40,7 +40,7 @@ export default function ContactSection() {
           <div className="lg:w-1/2">
             <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight uppercase tracking-wide mb-6">
               Une question ?{' '}
-              <span style={{ WebkitTextStroke: '2px #E91E8C', color: 'transparent' }}>Contactez-nous !</span>
+              <span style={{ WebkitTextStroke: '2px #F79400', color: 'transparent' }}>Contactez-nous !</span>
             </h2>
             <p className="text-gray-400 text-lg mb-8 max-w-md">
               Que ce soit pour une demande de prière, un témoignage ou une question pratique, notre équipe est là pour vous répondre.
@@ -80,7 +80,7 @@ export default function ContactSection() {
                   <p className="text-gray-400">Merci de nous avoir contactés. Nous reviendrons vers vous rapidement.</p>
                   <button 
                     onClick={() => setStatus('idle')}
-                    className="mt-6 text-[#E91E8C] font-bold hover:underline"
+                    className="mt-6 text-[#F79400] font-bold hover:underline"
                   >
                     Envoyer un autre message
                   </button>
@@ -95,7 +95,7 @@ export default function ContactSection() {
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#E91E8C] transition placeholder:text-gray-600"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#F79400] transition placeholder:text-gray-600"
                         placeholder="Jean Dupont"
                       />
                     </div>
@@ -106,7 +106,7 @@ export default function ContactSection() {
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#E91E8C] transition placeholder:text-gray-600"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#F79400] transition placeholder:text-gray-600"
                         placeholder="jean@example.com"
                       />
                     </div>
@@ -119,7 +119,7 @@ export default function ContactSection() {
                       rows="4"
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#E91E8C] transition placeholder:text-gray-600 resize-none"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#F79400] transition placeholder:text-gray-600 resize-none"
                       placeholder="Comment pouvons-nous vous aider ?"
                     ></textarea>
                   </div>
@@ -127,8 +127,8 @@ export default function ContactSection() {
                   <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className="w-full py-4 rounded-xl font-bold text-white uppercase tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg shadow-[#E91E8C]/20"
-                    style={{ background: 'linear-gradient(135deg, #E91E8C, #7B2FBE)' }}
+                    className="w-full py-4 rounded-xl font-bold text-white uppercase tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 shadow-lg shadow-[#F79400]/20"
+                    style={{ background: 'linear-gradient(135deg, #FFB830, #F79400)' }}
                   >
                     {status === 'loading' ? (
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

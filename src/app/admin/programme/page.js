@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Mic, BookOpen, Book, Megaphone, Heart } from 'lucide-react';
 
 export default function AdminProgram() {
   const [items, setItems] = useState([]);
@@ -117,11 +118,11 @@ export default function AdminProgram() {
                 <td className="p-4 font-medium text-slate-800 uppercase text-sm tracking-wide">{item.activity}</td>
                 <td className="p-4 text-xs text-gray-500">
                   <div className="flex flex-col gap-1">
-                    {item.leader && <span>🎤 Dir: {item.leader}</span>}
-                    {item.messenger && <span>📖 Mess: {item.messenger}</span>}
-                    {item.reader && <span>📚 Lect: {item.reader}</span>}
-                    {item.announcer && <span>📣 Ann: {item.announcer}</span>}
-                    {item.prayer && <span>🙏 Pri: {item.prayer}</span>}
+                     {item.leader && <span className="flex items-center gap-1"><Mic className="w-3 h-3" /> Dir: {item.leader}</span>}
+                     {item.messenger && <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> Mess: {item.messenger}</span>}
+                     {item.reader && <span className="flex items-center gap-1"><Book className="w-3 h-3" /> Lect: {item.reader}</span>}
+                     {item.announcer && <span className="flex items-center gap-1"><Megaphone className="w-3 h-3" /> Ann: {item.announcer}</span>}
+                     {item.prayer && <span className="flex items-center gap-1"><Heart className="w-3 h-3" /> Pri: {item.prayer}</span>}
                   </div>
                 </td>
                 <td className="p-4 text-right space-x-4">

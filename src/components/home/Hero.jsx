@@ -17,7 +17,7 @@ export default function Hero() {
       <div className="relative z-20 text-center px-4 w-full">
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
           Bienvenue à la{' '}
-          <span style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+          <span style={{ background: 'linear-gradient(135deg, #FFB830, #F79400)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
             Maison
           </span>
         </h1>

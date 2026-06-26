@@ -23,6 +23,7 @@
         "@tiptap/extension-italic": "^3.18.0",
         "@tiptap/extension-paragraph": "^3.18.0",
         "@tiptap/extension-text": "^3.18.0",
+        "@vercel/og": "^0.11.1",
         "axios": "^1.13.3",
         "bcrypt": "^6.0.0",
         "dotenv": "^17.3.1",

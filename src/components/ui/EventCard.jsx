@@ -32,13 +32,13 @@ export default function EventCard({ date, title, time, description, image, categ
         </p>
 
         {/* Title */}
-        <h3 className="text-[1.05rem] font-bold text-[#1a1a2e] mb-3 leading-snug hover:text-[#7B2FBE] transition-colors duration-200">
+        <h3 className="text-[1.05rem] font-bold text-[#1a1a2e] mb-3 leading-snug hover:text-[#E07800] transition-colors duration-200">
           {title}
         </h3>
 
         {/* Location */}
         <div className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="text-[#7B2FBE] flex-shrink-0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="text-[#F79400] flex-shrink-0">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
           </svg>
           <span className="truncate">{description ? description.substring(0, 40) + '...' : 'Lieu à confirmer'}</span>

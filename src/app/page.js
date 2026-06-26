@@ -2,6 +2,7 @@ import { query } from "@/lib/db";
 import Hero from "@/components/home/Hero";
 import BlogSection from "@/components/home/BlogSection";
 import LatestSermon from "@/components/home/LatestSermon";
+import GallerySection from "@/components/home/GallerySection";
 import EventCard from "@/components/ui/EventCard";
 import Link from "next/link"; // Importation pour rendre les cartes cliquables
 
@@ -54,6 +55,7 @@ export default async function Page() {
       <main>
         <Hero />
         <EventsSection events={events} />
+        <GallerySection />
         <BlogSection posts={posts} />
         <LatestSermon sermons={sermons} />
       </main>

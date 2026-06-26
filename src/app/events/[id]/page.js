@@ -1,6 +1,7 @@
 import { query } from "@/lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Calendar } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,8 +41,9 @@ export default async function EventPage({ params }) {
           {event.title}
         </h1>
 
-        <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-md text-sm mb-6">
-          📅 {new Date(event.date).toLocaleDateString('fr-FR')}
+        <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-md text-sm mb-6">
+          <Calendar className="w-4 h-4" />
+          {new Date(event.date).toLocaleDateString('fr-FR')}
         </div>
 
         <div className="h-[1px] bg-gray-200 w-full mb-6"></div>

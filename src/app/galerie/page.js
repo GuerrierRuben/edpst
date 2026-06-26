@@ -68,11 +68,11 @@ export default function GaleriePage() {
         
         {/* Hero Section */}
         <div className="mb-12 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-indigo-100">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-orange-100">
             <Camera size={14} /> Notre Galerie
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4 tracking-tight">
-            Souvenirs de notre <span style={{ background: 'linear-gradient(135deg, #7B2FBE, #E91E8C)', stroke: 'transparent', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communaute</span>
+            Souvenirs de notre <span style={{ background: 'linear-gradient(135deg, #FFB830, #F79400)', stroke: 'transparent', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communaute</span>
           </h1>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
             Parcourez les moments forts de notre eglise a travers notre galerie photos.
@@ -89,7 +89,7 @@ export default function GaleriePage() {
               className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border ${
                 activeCategory === cat
                   ? "bg-slate-800 text-white border-slate-800 shadow-lg shadow-slate-200 -translate-y-0.5"
-                  : "bg-white text-gray-500 border-gray-100 hover:border-indigo-200 hover:text-indigo-600 hover:bg-gray-50"
+                  : "bg-white text-gray-500 border-gray-100 hover:border-orange-200 hover:text-orange-600 hover:bg-gray-50"
               }`}
             >
               {cat}
@@ -155,7 +155,7 @@ export default function GaleriePage() {
             </p>
             <button 
               onClick={() => setActiveCategory("Tous")}
-              className="mt-8 text-indigo-600 font-bold hover:underline"
+               className="mt-8 text-orange-600 font-bold hover:underline"
             >
               Afficher toutes les photos
             </button>
@@ -181,7 +181,7 @@ export default function GaleriePage() {
             />
             
             <div className="text-center">
-              <span className="inline-block text-[10px] font-bold uppercase tracking-widest py-1 px-4 bg-indigo-600 text-white rounded-full mb-3">
+                <span className="inline-block text-[10px] font-bold uppercase tracking-widest py-1 px-4 bg-orange-600 text-white rounded-full mb-3">
                 {selectedImage.category}
               </span>
               <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-tight">

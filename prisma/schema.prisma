@@ -65,3 +65,15 @@ model Gallery {
   category  String   // e.g., "Culte dominical", "Étude biblique", etc.
   createdAt DateTime @default(now())
 }
+
+model Ministry {
+  id          Int      @id @default(autoincrement())
+  name        String   // Nom du ministère (ex: "Jeunesse", "Dames", "Hommes")
+  description String?  // Description du ministère
+  leaderName  String   // Nom du responsable
+  leaderRole  String?  // Rôle du responsable (ex: "Responsable", "Coordinateur")
+  leaderImage String?  // URL de l'image du responsable
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
