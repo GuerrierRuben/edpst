@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { headers } from "next/headers";
 import "./globals.css";
 
 export const metadata = {
@@ -12,12 +13,19 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // Récupérer le chemin depuis les headers
+  const headersList = headers();
+  const pathname = headersList.get("x-pathname") || "";
+  
+  // Si le chemin commence par /admin, on ne met pas le Navbar et Footer du site
+  const isAdminPage = pathname.startsWith("/admin");
+
   return (
     <html lang="fr">
       <body>
-        <Navbar />
+        {!isAdminPage && <Navbar />}
         <main>{children}</main>
-        <Footer />
+        {!isAdminPage && <Footer />}
       </body>
     </html>
   );
