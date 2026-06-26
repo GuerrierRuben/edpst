@@ -6,6 +6,7 @@ export async function POST(request) {
   try {
     const formData = await request.formData();
     const file = formData.get('file');
+    const type = formData.get('type') || 'ministries'; // 'ministries' ou 'gallery'
 
     if (!file) {
       return NextResponse.json(
@@ -35,10 +36,10 @@ export async function POST(request) {
     // Générer un nom de fichier unique
     const timestamp = Date.now();
     const extension = file.name.split('.').pop();
-    const filename = `ministry-${timestamp}.${extension}`;
+    const filename = `${type}-${timestamp}.${extension}`;
 
     // Créer le dossier uploads s'il n'existe pas
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'ministries');
+    const uploadsDir = join(process.cwd(), 'public', 'uploads', type);
     try {
       mkdirSync(uploadsDir, { recursive: true });
     } catch (error) {
@@ -52,7 +53,7 @@ export async function POST(request) {
     writeFileSync(filepath, buffer);
 
     // Retourner l'URL publique
-    const publicUrl = `/uploads/ministries/${filename}`;
+    const publicUrl = `/uploads/${type}/${filename}`;
 
     return NextResponse.json({
       success: true,

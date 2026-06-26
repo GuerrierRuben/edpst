@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Trash2, Upload, ImageIcon, Filter, CheckCircle, AlertCircle, X } from "lucide-react";
+import Image from "next/image";
 
 const CATEGORIES = [
   "Culte dominical",
@@ -46,29 +47,44 @@ export default function AdminGallery() {
     fetchImages();
   }, [filter]);
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
     const newImages = [];
-    let processedCount = 0;
-
-    files.forEach(file => {
+    
+    for (const file of files) {
       if (file.size > 8 * 1024 * 1024) {
         showNotification(`${file.name} est trop lourde (max 8Mo)`, "error");
-        return;
+        continue;
       }
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImages.push(reader.result);
-        processedCount++;
-        if (processedCount === files.length) {
-          setSelectedImages([...selectedImages, ...newImages]);
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('type', 'gallery');
+        
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          newImages.push(data.url);
+        } else {
+          showNotification(`Erreur: ${data.error}`, "error");
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      } catch (error) {
+        showNotification(`Erreur lors de l'upload de ${file.name}`, "error");
+      }
+    }
+
+    if (newImages.length > 0) {
+      setSelectedImages([...selectedImages, ...newImages]);
+      showNotification(`${newImages.length} image(s) prête(s) à publier`);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -185,22 +201,22 @@ export default function AdminGallery() {
               <div className="group">
                 <label className="block text-xs font-bold uppercase text-gray-500 mb-1.5 ml-1">Fichiers Photos</label>
                 <div className={`relative border-2 border-dashed rounded-2xl p-4 transition-all flex flex-col items-center justify-center min-h-[200px] overflow-hidden ${selectedImages.length > 0 ? 'border-emerald-500/50 bg-emerald-50/10' : 'border-gray-200 hover:border-indigo-500 hover:bg-gray-50' }`}>
-                  {selectedImages.length > 0 ? (
-                    <div className="grid grid-cols-3 gap-2 w-full">
-                      {selectedImages.map((img, idx) => (
-                        <div key={idx} className="relative aspect-square">
-                          <img src={img} className="w-full h-full object-cover rounded-lg" alt="Preview" />
-                        </div>
-                      ))}
-                      <button 
-                        type="button" 
-                        onClick={() => setSelectedImages([])}
-                        className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:bg-red-600"
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
-                  ) : (
+                   {selectedImages.length > 0 ? (
+                     <div className="grid grid-cols-3 gap-2 w-full">
+                       {selectedImages.map((img, idx) => (
+                         <div key={idx} className="relative aspect-square">
+                           <img src={img} className="w-full h-full object-cover rounded-lg" alt="Preview" loading="lazy" />
+                         </div>
+                       ))}
+                       <button 
+                         type="button" 
+                         onClick={() => setSelectedImages([])}
+                         className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full shadow-lg hover:bg-red-600"
+                       >
+                         <X size={14} />
+                       </button>
+                     </div>
+                   ) : (
                     <>
                       <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                         <ImageIcon size={24} className="text-gray-400 group-hover:text-indigo-600" />
@@ -254,11 +270,13 @@ export default function AdminGallery() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {images.map((img) => (
                 <div key={img.id} className="group relative aspect-square rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                  <img 
-                    src={img.image} 
-                    alt={img.title || ""} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                  />
+                   <img 
+                     src={img.image} 
+                     alt={img.title || ""} 
+                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                     loading="lazy"
+                     decoding="async"
+                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
                     <p className="text-white text-xs font-bold mb-1 line-clamp-1">{img.title || "Sans titre"}</p>
                     <div className="flex items-center justify-between">

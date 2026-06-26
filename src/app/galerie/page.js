@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Filter, ImageIcon, X, Maximize2, Share2, Camera } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
+import Image from "next/image";
 
 const CATEGORIES = [
   "Tous",
@@ -113,10 +114,13 @@ export default function GaleriePage() {
                 onClick={() => setSelectedImage(img)}
                 style={{ animationDelay: `${i * 50}ms` }}
               >
-                <img 
-                  src={img.image} 
-                  alt={img.title || ""} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                <Image
+                  src={img.image}
+                  alt={img.title || ""}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
                 
                 {/* Info Card */}
@@ -174,10 +178,13 @@ export default function GaleriePage() {
           </button>
           
           <div className="relative max-w-5xl w-full max-h-[80vh] flex flex-col items-center gap-6">
-            <img 
-              src={selectedImage.image} 
-              alt={selectedImage.title || ""} 
-              className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl border border-white/5" 
+            <Image
+              src={selectedImage.image}
+              alt={selectedImage.title || ""}
+              width={1200}
+              height={800}
+              className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl border border-white/5"
+              priority
             />
             
             <div className="text-center">
