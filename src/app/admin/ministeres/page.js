@@ -158,55 +158,55 @@ export default function AdminMinistriesPage() {
   };
 
   return (
-    <div>
+    <div className="p-4 md:p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 md:mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">Gestion des Ministères</h1>
-          <p className="text-gray-600 mt-2">Gérez les ministères et leurs responsables</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Gestion des Ministères</h1>
+          <p className="text-gray-600 mt-2 text-sm md:text-base">Gérez les ministères et leurs responsables</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition"
+          className="bg-indigo-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-bold hover:bg-indigo-700 transition text-sm md:text-base w-full sm:w-auto"
         >
           + Nouveau Ministère
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">Total Ministères</p>
-              <p className="text-3xl font-bold text-slate-800 mt-2">{ministries.length}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-gray-600 text-xs md:text-sm">Total Ministères</p>
+              <p className="text-2xl md:text-3xl font-bold text-slate-800 mt-1 md:mt-2">{ministries.length}</p>
             </div>
-            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-              <Users className="w-6 h-6 text-indigo-600" />
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <Users className="w-5 h-5 md:w-6 md:h-6 text-indigo-600" />
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">Ministères Actifs</p>
-              <p className="text-3xl font-bold text-green-600 mt-2">
+            <div className="flex-1 min-w-0">
+              <p className="text-gray-600 text-xs md:text-sm">Ministères Actifs</p>
+              <p className="text-2xl md:text-3xl font-bold text-green-600 mt-1 md:mt-2">
                 {ministries.filter(m => m.isActive).length}
               </p>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">Responsables</p>
-              <p className="text-3xl font-bold text-slate-800 mt-2">{ministries.length}</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-gray-600 text-xs md:text-sm">Responsables</p>
+              <p className="text-2xl md:text-3xl font-bold text-slate-800 mt-1 md:mt-2">{ministries.length}</p>
             </div>
-            <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
-              <Star className="w-6 h-6 text-amber-600" />
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <Star className="w-5 h-5 md:w-6 md:h-6 text-amber-600" />
             </div>
           </div>
         </div>
@@ -232,7 +232,7 @@ export default function AdminMinistriesPage() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {ministries.map((ministry) => (
             <div
               key={ministry.id}
@@ -300,15 +300,15 @@ export default function AdminMinistriesPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-slate-200">
-              <h2 className="text-2xl font-bold text-slate-800">
+            <div className="p-4 md:p-6 border-b border-slate-200">
+              <h2 className="text-xl md:text-2xl font-bold text-slate-800">
                 {editingMinistry ? 'Modifier le Ministère' : 'Nouveau Ministère'}
               </h2>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-4 md:space-y-6">
               {/* Nom du ministère */}
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-2">
@@ -443,17 +443,17 @@ export default function AdminMinistriesPage() {
               </div>
 
               {/* Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-slate-200">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 px-6 py-3 border border-slate-300 text-slate-700 rounded-lg font-bold hover:bg-slate-50 transition"
+                  className="flex-1 px-6 py-3 border border-slate-300 text-slate-700 rounded-lg font-bold hover:bg-slate-50 transition text-sm md:text-base"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition"
+                  className="flex-1 bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition text-sm md:text-base"
                 >
                   {editingMinistry ? 'Mettre à jour' : 'Créer'}
                 </button>

@@ -119,70 +119,72 @@ export default function AdminEvents() {
   };
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-slate-800">Calendrier des Événements</h1>
+    <div className="space-y-6 p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-xl md:text-2xl font-bold text-slate-800">Calendrier des Événements</h1>
         <button
           onClick={openAddModal}
-          className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition shadow-md"
+          className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition shadow-md text-sm md:text-base w-full sm:w-auto"
         >
           + Nouvel Événement
         </button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b">
-            <tr>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600">Date</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600">Événement</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600">Lieu</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {events.map((event) => (
-              <tr key={event.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm font-bold text-emerald-600">
-                  {formatDate(event.date)}
-                </td>
-                <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                  <div className="flex items-center gap-3">
-                    {event.image && (
-                      <img src={event.image} alt="" className="w-10 h-10 rounded object-cover border" />
-                    )}
-                    {event.title}
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">{event.location}</td>
-                <td className="px-6 py-4 text-sm text-right space-x-3">
-                  <button
-                    onClick={() => openEditModal(event)}
-                    className="text-blue-600 hover:text-blue-800 font-bold uppercase text-xs"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    onClick={() => setItemToDelete(event)}
-                    className="text-red-600 hover:text-red-800 font-bold uppercase text-xs"
-                  >
-                    Supprimer
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[600px]">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600">Date</th>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600">Événement</th>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600">Lieu</th>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600 text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {loading && <p className="p-10 text-center text-gray-500">Chargement du calendrier...</p>}
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {events.map((event) => (
+                <tr key={event.id} className="hover:bg-gray-50">
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-bold text-emerald-600">
+                    {formatDate(event.date)}
+                  </td>
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-medium text-slate-900">
+                    <div className="flex items-center gap-2 md:gap-3">
+                      {event.image && (
+                        <img src={event.image} alt="" className="w-8 h-8 md:w-10 md:h-10 rounded object-cover border" />
+                      )}
+                      <span className="truncate">{event.title}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-500 truncate">{event.location}</td>
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-right space-x-2 md:space-x-3">
+                    <button
+                      onClick={() => openEditModal(event)}
+                      className="text-blue-600 hover:text-blue-800 font-bold uppercase text-xs"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      onClick={() => setItemToDelete(event)}
+                      className="text-red-600 hover:text-red-800 font-bold uppercase text-xs"
+                    >
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {loading && <p className="p-6 md:p-10 text-center text-gray-500 text-sm md:text-base">Chargement du calendrier...</p>}
         {!loading && events.length === 0 && (
-          <p className="p-10 text-center text-gray-500">Aucun événement prévu.</p>
+          <p className="p-6 md:p-10 text-center text-gray-500 text-sm md:text-base">Aucun événement prévu.</p>
         )}
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6 text-slate-800">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-4 md:p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-slate-800">
               {editingId ? "Modifier l'événement" : "Planifier un événement"}
             </h2>
 
@@ -199,7 +201,7 @@ export default function AdminEvents() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Date</label>
                   <input
@@ -272,17 +274,17 @@ export default function AdminEvents() {
                 )}
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <button
                   type="submit"
-                  className="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-bold hover:bg-emerald-700 transition"
+                  className="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-bold hover:bg-emerald-700 transition text-sm md:text-base"
                 >
                   {editingId ? "Enregistrer les modifications" : "Publier l'événement"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-100 text-gray-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition"
+                  className="bg-gray-100 text-gray-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition text-sm md:text-base"
                 >
                   Annuler
                 </button>

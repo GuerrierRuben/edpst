@@ -120,63 +120,65 @@ export default function AdminSermons() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-slate-800">Gestion des Sermons</h1>
+    <div className="space-y-6 p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-xl md:text-2xl font-bold text-slate-800">Gestion des Sermons</h1>
         <button
           onClick={openAddModal}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition"
+          className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition text-sm md:text-base w-full sm:w-auto"
         >
           + Nouveau Sermon
         </button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b">
-            <tr>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600">Date</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600">Titre</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600">Prédicateur</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {sermons.map((sermon) => (
-              <tr key={sermon.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  {formatDate(sermon.date)}
-                </td>
-                <td className="px-6 py-4 text-sm font-medium text-slate-900">{sermon.title}</td>
-                <td className="px-6 py-4 text-sm text-gray-500">{sermon.speaker}</td>
-                <td className="px-6 py-4 text-sm text-right space-x-3">
-                  <button
-                    onClick={() => openEditModal(sermon)}
-                    className="text-indigo-600 hover:text-indigo-800 font-bold uppercase text-xs"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    onClick={() => setItemToDelete(sermon)}
-                    className="text-red-600 hover:text-red-800 font-bold uppercase text-xs"
-                  >
-                    Supprimer
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[600px]">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600">Date</th>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600">Titre</th>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600">Prédicateur</th>
+                <th className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600 text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {loading && <p className="p-10 text-center text-gray-500">Chargement des messages...</p>}
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {sermons.map((sermon) => (
+                <tr key={sermon.id} className="hover:bg-gray-50">
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-500">
+                    {formatDate(sermon.date)}
+                  </td>
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm font-medium text-slate-900 truncate">{sermon.title}</td>
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-500 truncate">{sermon.speaker}</td>
+                  <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-right space-x-2 md:space-x-3">
+                    <button
+                      onClick={() => openEditModal(sermon)}
+                      className="text-indigo-600 hover:text-indigo-800 font-bold uppercase text-xs"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      onClick={() => setItemToDelete(sermon)}
+                      className="text-red-600 hover:text-red-800 font-bold uppercase text-xs"
+                    >
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {loading && <p className="p-6 md:p-10 text-center text-gray-500 text-sm md:text-base">Chargement des sermons...</p>}
         {!loading && sermons.length === 0 && (
-          <p className="p-10 text-center text-gray-500">Aucun sermon enregistré.</p>
+          <p className="p-6 md:p-10 text-center text-gray-500 text-sm md:text-base">Aucun sermon enregistré.</p>
         )}
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6 text-slate-800">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-4 md:p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-slate-800">
               {editingId ? "Modifier le sermon" : "Ajouter un sermon"}
             </h2>
 
@@ -192,7 +194,7 @@ export default function AdminSermons() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase text-gray-500 mb-1">Prédicateur</label>
                   <input
@@ -263,17 +265,17 @@ export default function AdminSermons() {
                 )}
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <button
                   type="submit"
-                  className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition"
+                  className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition text-sm md:text-base"
                 >
                   {editingId ? "Enregistrer" : "Publier"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-100 text-gray-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition"
+                  className="bg-gray-100 text-gray-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-200 transition text-sm md:text-base"
                 >
                   Annuler
                 </button>

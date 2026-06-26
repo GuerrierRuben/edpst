@@ -81,14 +81,14 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 md:gap-6">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-            <div>
-              <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">{stat.label}</p>
-              <h3 className="text-3xl font-bold text-slate-800">{stat.value}</h3>
+          <div key={stat.label} className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <p className="text-gray-400 text-[10px] md:text-xs font-bold uppercase tracking-wider mb-1 truncate">{stat.label}</p>
+              <h3 className="text-2xl md:text-3xl font-bold text-slate-800">{stat.value}</h3>
             </div>
-            <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
+            <div className={`p-2 md:p-3 rounded-xl ${stat.bg} ${stat.color} flex-shrink-0`}>
               {stat.icon}
             </div>
           </div>
@@ -116,7 +116,7 @@ export default async function AdminDashboard() {
         <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
           <Activity size={20} className="text-indigo-600" /> Actions Rapides
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           <QuickActionCard
             title="Nouvel Événement"
             color="bg-blue-600"
@@ -164,7 +164,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Activity Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Événements Récents */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
