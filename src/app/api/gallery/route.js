@@ -1,6 +1,8 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+export const runtime = 'nodejs';
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);

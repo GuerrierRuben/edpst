@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { unlinkSync, readdirSync, rmSync } from "fs";
 import { join } from "path";
 
+export const runtime = 'nodejs';
+
 export async function DELETE() {
   try {
     // Récupérer toutes les images pour supprimer les fichiers physiques
