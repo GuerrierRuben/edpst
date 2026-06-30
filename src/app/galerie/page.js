@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Filter, ImageIcon, X, Maximize2, Share2, Camera } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Filter, ImageIcon, X, Maximize2, Share2, Camera, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Image from "next/image";
 
@@ -16,8 +16,20 @@ export default function GaleriePage() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("Tous");
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [toast, setToast] = useState(null);
+  
+  // Bloquer le scroll quand la lightbox est ouverte
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedIndex]);
 
   const showToast = (message) => {
     setToast(message);
@@ -60,6 +72,64 @@ export default function GaleriePage() {
   useEffect(() => {
     fetchImages();
   }, [activeCategory]);
+
+  const openLightbox = (index) => {
+    setSelectedIndex(index);
+  };
+
+  const closeLightbox = () => {
+    setSelectedIndex(null);
+  };
+
+  const goToPrevious = useCallback(() => {
+    setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  }, [images.length]);
+
+  const goToNext = useCallback(() => {
+    setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  }, [images.length]);
+
+  // Gestion du swipe tactile
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+
+    if (Math.abs(distance) > minSwipeDistance) {
+      if (distance > 0) {
+        goToNext();
+      } else {
+        goToPrevious();
+      }
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  // Gestion du clavier
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (selectedIndex === null) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') goToPrevious();
+      if (e.key === 'ArrowRight') goToNext();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIndex, goToPrevious, goToNext]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -111,7 +181,7 @@ export default function GaleriePage() {
               <div 
                 key={img.id} 
                 className="group relative aspect-[4/5] rounded-3xl overflow-hidden bg-white shadow-sm hover:shadow-2xl transition-all duration-500 cursor-zoom-in"
-                onClick={() => setSelectedImage(img)}
+                onClick={() => openLightbox(i)}
                 style={{ animationDelay: `${i * 50}ms` }}
               >
                 <Image
@@ -168,45 +238,80 @@ export default function GaleriePage() {
       </main>
 
       {/* Lightbox / Modal */}
-      {selectedImage && (
-        <div className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 md:p-10 backdrop-blur-xl animate-in fade-in zoom-in duration-300">
-          <button 
-            onClick={() => setSelectedImage(null)}
-            className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors h-12 w-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full"
+      {selectedIndex !== null && (
+        <div
+          className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center"
+          onClick={closeLightbox}
+        >
+          {/* Bouton fermer */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
           >
-            <X size={28} />
+            <X size={24} />
           </button>
-          
-          <div className="relative max-w-5xl w-full max-h-[80vh] flex flex-col items-center gap-6">
-            <Image
-              src={selectedImage.image}
-              alt={selectedImage.title || ""}
-              width={1200}
-              height={800}
-              className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl border border-white/5"
-              priority
-            />
-            
-            <div className="text-center">
-                <span className="inline-block text-[10px] font-bold uppercase tracking-widest py-1 px-4 bg-orange-600 text-white rounded-full mb-3">
-                {selectedImage.category}
-              </span>
-              <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-tight">
-                {selectedImage.title || "Souvenir de l'eglise"}
-              </h2>
-              <p className="text-white/40 mt-1 text-sm">
-                Ajoutee le {new Date(selectedImage.createdAt).toLocaleDateString()}
-              </p>
-              <div className="mt-8 flex justify-center">
-                <button 
-                  onClick={(e) => handleShare(e, selectedImage)}
-                  className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full font-bold transition-all border border-white/20"
-                >
-                  <Share2 size={18} /> Partager cette photo
-                </button>
-              </div>
+
+          {/* Bouton précédent */}
+          {images.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                goToPrevious();
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+            >
+              <ChevronLeft size={32} />
+            </button>
+          )}
+
+          {/* Bouton suivant */}
+          {images.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                goToNext();
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-colors"
+            >
+              <ChevronRight size={32} />
+            </button>
+          )}
+
+          {/* Image container avec swipe */}
+          <div
+            className="relative w-full h-full flex items-center justify-center"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div
+              className="relative w-full h-full max-w-6xl max-h-screen p-4 md:p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={images[selectedIndex]?.image}
+                alt={images[selectedIndex]?.title || `Photo ${selectedIndex + 1}`}
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
           </div>
+
+          {/* Indicateur de position */}
+          {images.length > 1 && (
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedIndex(i)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    i === selectedIndex ? 'bg-white w-8' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
