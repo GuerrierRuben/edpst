@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
-import { join } from 'path';
+import { put } from '@vercel/blob';
 
 export const runtime = 'nodejs';
 
@@ -40,26 +39,20 @@ export async function POST(request) {
     const extension = file.name.split('.').pop();
     const filename = `${type}-${timestamp}.${extension}`;
 
-    // Créer le dossier uploads s'il n'existe pas
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', type);
-    try {
-      mkdirSync(uploadsDir, { recursive: true });
-    } catch (error) {
-      // Le dossier existe déjà
-    }
-
-    // Sauvegarder le fichier
-    const filepath = join(uploadsDir, filename);
+    // Convertir le fichier en buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    writeFileSync(filepath, buffer);
 
-    // Retourner l'URL publique
-    const publicUrl = `/uploads/${type}/${filename}`;
+    // Upload vers Vercel Blob Storage
+    const blob = await put(filename, buffer, {
+      access: 'public',
+      contentType: file.type,
+      pathname: `${type}/${filename}`,
+    });
 
     return NextResponse.json({
       success: true,
-      url: publicUrl,
+      url: blob.url,
       filename: filename
     });
 
