@@ -51,7 +51,7 @@ export default function Footer() {
         {/* Col 1 : Logo + description */}
         <div className="md:col-span-2">
           <Link href="/" className="flex items-center gap-2.5 mb-5">
-            <img src="/logo.svg" alt="Église de Petit Paradis" className="h-20 w-auto" />
+            <img src="/logo.svg" alt="Église de Dieu Salut Pour Tous" className="h-20 w-auto" />
           </Link>
           <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
             Une église au cœur de la ville, passionnée par Jésus et dévouée à servir notre communauté.
@@ -74,11 +74,15 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Col 3 : Horaires originaux + Réseaux sociaux */}
+        {/* Col 3 : Horaires + Réseaux sociaux */}
         <div>
-          <h4 className="font-semibold mb-5 text-white text-sm tracking-wide uppercase">Horaires</h4>
-          <p className="text-gray-400 text-sm">Dimanche : 10h00 &amp; 18h00</p>
-          <p className="text-gray-400 text-sm mt-2">Mercredi : 19h30 (Prière)</p>
+          <h4 className="font-semibold mb-5 text-white text-sm tracking-wide uppercase">Horaires des Cultes</h4>
+          <div className="space-y-2 text-sm text-gray-400">
+            <p>📅 Dimanche : 7h00 - 10h30</p>
+            <p>📅 Mardi : Étude Biblique 17h00 - 19h00</p>
+            <p>📅 Mercredi : Jeûne de Prière 8h00 - 12h00</p>
+            <p>📅 Jeudi : Service de Prière 17h00 - 19h00</p>
+          </div>
 
           <h4 className="font-semibold mt-8 mb-4 text-white text-sm tracking-wide uppercase">Nos Réseaux</h4>
           <div className="flex gap-3 flex-wrap">
@@ -96,12 +100,12 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-white/8 py-5">
-        <div className="max-w-7xl mx-auto px-6 text-center text-gray-500 text-xs">
-          © 2026 Nom de ton Église. Conçu avec excellence.
+        {/* Bottom bar */}
+        <div className="border-t border-white/8 py-5">
+          <div className="max-w-7xl mx-auto px-6 text-center text-gray-500 text-xs">
+            © 2026 Église de Dieu Salut Pour Tous. Conçu avec excellence.
+          </div>
         </div>
-      </div>
     </footer>
   );
 }

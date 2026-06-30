@@ -39,8 +39,8 @@ export default function GaleriePage() {
   const handleShare = async (e, img) => {
     e.stopPropagation(); // Empecher l'ouverture de la lightbox si on clique sur partager
     const shareData = {
-      title: img.title || "Photo Galerie - EDPST",
-      text: `Decouvrez cette photo de l'eglise EDPST : ${img.title || ""}`,
+      title: img.title || "Photo Galerie - Église de Dieu Salut Pour Tous",
+      text: `Decouvrez cette photo de l'Église de Dieu Salut Pour Tous : ${img.title || ""}`,
       url: window.location.href,
     };
 
@@ -146,7 +146,7 @@ export default function GaleriePage() {
             Souvenirs de notre <span style={{ background: 'linear-gradient(135deg, #FFB830, #F79400)', stroke: 'transparent', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communaute</span>
           </h1>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
-            Parcourez les moments forts de notre eglise a travers notre galerie photos.
+            Parcourez les moments forts de l'Église de Dieu Salut Pour Tous à travers notre galerie photos.
             Vivez et revivez nos moments de culte et de partage.
           </p>
         </div>
@@ -298,9 +298,25 @@ export default function GaleriePage() {
             </div>
           </div>
 
+          {/* Info et partage */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest py-1 px-4 bg-orange-600 text-white rounded-full mb-3">
+              {images[selectedIndex]?.category}
+            </span>
+            <h2 className="text-white text-xl md:text-2xl font-extrabold tracking-tight mb-2">
+              {images[selectedIndex]?.title || "Souvenir de l'Église de Dieu Salut Pour Tous"}
+            </h2>
+            <button 
+              onClick={(e) => handleShare(e, images[selectedIndex])}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full font-bold transition-all border border-white/20 mx-auto"
+            >
+              <Share2 size={16} /> Partager cette photo
+            </button>
+          </div>
+
           {/* Indicateur de position */}
           {images.length > 1 && (
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 flex gap-2">
               {images.map((_, i) => (
                 <button
                   key={i}
@@ -323,11 +339,11 @@ export default function GaleriePage() {
       )}
 
       {/* Footer Area / Call to action */}
-      <footer className="bg-white border-t border-gray-100 py-10 mt-auto">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-gray-400 text-sm font-medium">EDPST - Eglise de Dieu Parole Salut pour Tous</p>
-        </div>
-      </footer>
+        <footer className="bg-white border-t border-gray-100 py-10 mt-auto">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <p className="text-gray-400 text-sm font-medium">Église de Dieu Salut Pour Tous</p>
+          </div>
+        </footer>
     </div>
   );
 }

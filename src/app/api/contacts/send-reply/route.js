@@ -32,7 +32,7 @@ export async function POST(request) {
 
     // Préparation de l'email
     const mailOptions = {
-      from: `"EDPST - Église" <${gmailUser}>`,
+      from: `"Église de Dieu Salut Pour Tous" <${gmailUser}>`,
       to: recipientEmail,
       subject: 'Re: Votre message',
       html: `
@@ -52,7 +52,7 @@ export async function POST(request) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>EDPST - Église</h1>
+            <h1>Église de Dieu Salut Pour Tous</h1>
               <p>Réponse à votre message</p>
             </div>
 
@@ -68,7 +68,7 @@ export async function POST(request) {
             </div>
 
             <div class="footer">
-              <p>Cet email a été envoyé automatiquement depuis le site de l'EDPST.</p>
+              <p>Cet email a été envoyé automatiquement depuis le site de l'Église de Dieu Salut Pour Tous.</p>
               <p>Pour nous contacter : ${gmailUser}</p>
             </div>
           </div>
@@ -83,8 +83,8 @@ ${replyText}
 --- Votre message original ---
 ${originalMessage}
 
---
-Cet email a été envoyé automatiquement depuis le site de l'EDPST.
+-- 
+Cet email a été envoyé automatiquement depuis le site de l'Église de Dieu Salut Pour Tous.
 Pour nous contacter : ${gmailUser}
       `.trim()
     };
