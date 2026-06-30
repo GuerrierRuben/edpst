@@ -1,5 +1,6 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { del } from '@vercel/blob';
 
 export const runtime = 'nodejs';
 
@@ -65,11 +66,35 @@ export async function DELETE(request) {
       return NextResponse.json({ error: "ID requis" }, { status: 400 });
     }
 
-    const result = await query('DELETE FROM "Gallery" WHERE id = $1 RETURNING *', [id]);
+    // Récupérer l'image avant de supprimer
+    const result = await query('SELECT * FROM "Gallery" WHERE id = $1', [id]);
 
     if (result.rowCount === 0) {
       return NextResponse.json({ error: "Image non trouvée" }, { status: 404 });
     }
+
+    const image = result.rows[0];
+
+    // Supprimer de Vercel Blob Storage
+    try {
+      const imageUrl = image.image;
+      if (imageUrl) {
+        // Extraire le filename de l'URL
+        const urlParts = imageUrl.split('/');
+        const filename = urlParts[urlParts.length - 1];
+        
+        if (filename) {
+          await del(filename);
+          console.log('File deleted from Vercel Blob:', filename);
+        }
+      }
+    } catch (blobError) {
+      console.error('Error deleting from Vercel Blob:', blobError);
+      // Continue même si la suppression du blob échoue
+    }
+
+    // Supprimer de la base de données
+    await query('DELETE FROM "Gallery" WHERE id = $1', [id]);
 
     return NextResponse.json({ success: true, message: "Image supprimée" });
   } catch (error) {

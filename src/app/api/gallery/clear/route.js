@@ -1,29 +1,35 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { unlinkSync, readdirSync, rmSync } from "fs";
-import { join } from "path";
+import { del } from '@vercel/blob';
 
 export const runtime = 'nodejs';
 
 export async function DELETE() {
   try {
-    // Récupérer toutes les images pour supprimer les fichiers physiques
+    // Récupérer toutes les images pour supprimer les fichiers de Vercel Blob
     const result = await query('SELECT image FROM "Gallery"');
     const images = result.rows;
     
-    // Supprimer les fichiers physiques
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'gallery');
-    try {
-      const files = readdirSync(uploadsDir);
-      files.forEach(file => {
-        try {
-          unlinkSync(join(uploadsDir, file));
-        } catch (err) {
-          console.error(`Erreur suppression fichier ${file}:`, err);
+    // Supprimer les fichiers de Vercel Blob Storage
+    let deletedCount = 0;
+    for (const image of images) {
+      try {
+        const imageUrl = image.image;
+        if (imageUrl) {
+          // Extraire le filename de l'URL
+          const urlParts = imageUrl.split('/');
+          const filename = urlParts[urlParts.length - 1];
+          
+          if (filename) {
+            await del(filename);
+            deletedCount++;
+            console.log('File deleted from Vercel Blob:', filename);
+          }
         }
-      });
-    } catch (err) {
-      console.log('Dossier uploads/gallery vide ou inexistant');
+      } catch (blobError) {
+        console.error('Error deleting from Vercel Blob:', blobError);
+        // Continue même si la suppression du blob échoue
+      }
     }
     
     // Supprimer toutes les images de la table Gallery
@@ -31,7 +37,7 @@ export async function DELETE() {
     
     return NextResponse.json({ 
       success: true, 
-      message: `${deleteResult.rowCount} images supprimées de la base de données et du dossier uploads/gallery`
+      message: `${deleteResult.rowCount} images supprimées de la base de données et ${deletedCount} fichiers supprimés de Vercel Blob`
     });
   } catch (error) {
     console.error('Erreur lors de la suppression:', error);
